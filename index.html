@@ -12,6 +12,7 @@
         :root {
             --primary: #1b5e2a;
             --primary-light: #4c8b5a;
+            --primary-dark: #0e3b1a;
             --surface: #ffffff;
             --background: #f5f9f3;
             --text: #1a2e18;
@@ -21,16 +22,21 @@
             --danger: #b84a4a;
             --warning: #cc7b2b;
             --verified: #2a7faa;
+            --gold: #fbbf24;
         }
         body {
             font-family: 'Inter', sans-serif;
             background: var(--background);
             color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+        .app-container {
             max-width: 480px;
             margin: 0 auto;
-            padding-bottom: 80px;
+            background: var(--background);
+            position: relative;
         }
-        /* Header */
         .header {
             background: var(--surface);
             padding: 15px 20px;
@@ -49,6 +55,7 @@
             font-size: 1.4rem;
             font-weight: 700;
             color: var(--primary);
+            cursor: pointer;
         }
         .auth-buttons {
             display: flex;
@@ -61,21 +68,57 @@
             font-weight: 600;
             cursor: pointer;
             font-size: 0.9rem;
+            transition: all 0.2s;
         }
         .btn-primary {
             background: var(--primary);
             color: white;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
         }
         .btn-outline {
             background: transparent;
             border: 2px solid var(--primary);
             color: var(--primary);
         }
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
         .btn-danger {
             background: var(--danger);
             color: white;
         }
-        /* Feed */
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        .btn-sm {
+            padding: 4px 12px;
+            font-size: 0.8rem;
+        }
+        .search-section {
+            padding: 15px 20px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+        .search-bar {
+            background: var(--background);
+            border-radius: 30px;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid var(--border);
+        }
+        .search-bar input {
+            border: none;
+            background: transparent;
+            width: 100%;
+            font-size: 0.95rem;
+            outline: none;
+        }
         .feed {
             padding: 15px;
         }
@@ -186,12 +229,6 @@
             color: var(--text-light);
             flex-wrap: wrap;
         }
-        .rating-stats span {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        /* Bottom Nav */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -202,7 +239,7 @@
             background: var(--surface);
             display: flex;
             justify-content: space-around;
-            padding: 12px 0;
+            padding: 12px 0 8px;
             border-top: 2px solid var(--border);
             z-index: 1000;
         }
@@ -221,7 +258,6 @@
         .nav-item.active { 
             color: var(--primary); 
         }
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -264,10 +300,6 @@
             font-size: 1rem;
             font-family: inherit;
         }
-        .form-group textarea {
-            min-height: 80px;
-            resize: vertical;
-        }
         .loading {
             text-align: center;
             padding: 40px;
@@ -277,34 +309,68 @@
             color: var(--danger);
             font-size: 0.9rem;
             margin-top: 5px;
+            padding: 10px;
+            background: #fee;
+            border-radius: 8px;
+        }
+        .success-message {
+            color: var(--success);
+            padding: 10px;
+            background: #e8f5e9;
+            border-radius: 8px;
         }
         .user-menu {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-        .user-menu i {
-            font-size: 1.3rem;
-            cursor: pointer;
-        }
-        .welcome-message {
+        .welcome-card {
             text-align: center;
             padding: 40px 20px;
             background: var(--surface);
             border-radius: 24px;
             margin: 20px;
         }
-        .welcome-message h3 {
-            margin: 15px 0;
-            color: var(--primary);
+        .admin-badge {
+            background: var(--gold);
+            color: var(--primary-dark);
+            padding: 4px 8px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .spinner {
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-dark);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 500;
+            z-index: 3000;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .toast.show {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <div class="app">
-        <!-- Header -->
+    <div class="app-container">
         <div class="header">
-            <div class="logo" onclick="window.location.reload()">
+            <div class="logo" onclick="location.reload()">
                 <i class="fas fa-leaf"></i>
                 <span>HerbTrace</span>
             </div>
@@ -313,17 +379,31 @@
                 <button class="btn btn-primary" onclick="showModal('signupModal')">Sign Up</button>
             </div>
             <div class="user-menu" id="userMenu" style="display: none;">
-                <i class="fas fa-bell"></i>
-                <i class="fas fa-user-circle" style="font-size: 2rem;" onclick="showProfile()"></i>
+                <i class="fas fa-plus-circle" style="font-size: 1.5rem; cursor: pointer;" onclick="showModal('createPostModal')"></i>
+                <i class="fas fa-bell" style="cursor: pointer;"></i>
+                <i class="fas fa-user-circle" style="font-size: 2rem; cursor: pointer;" onclick="showProfile()"></i>
             </div>
         </div>
 
-        <!-- Feed -->
-        <div class="feed" id="feed">
-            <div class="loading">Loading herbal community...</div>
+        <div id="toast" class="toast"></div>
+
+        <div class="search-section">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search herbs..." onkeyup="handleSearchInput()">
+            </div>
         </div>
 
-        <!-- Bottom Navigation -->
+        <div id="contentArea">
+            <div class="feed" id="feed">
+                <div class="loading">
+                    <i class="fas fa-leaf fa-spin" style="font-size: 3rem; color: var(--primary-light); margin-bottom: 15px;"></i>
+                    <h3>Loading HerbTrace...</h3>
+                    <p style="margin-top: 10px; color: var(--text-light);">Connecting to the herbal community</p>
+                </div>
+            </div>
+        </div>
+
         <div class="bottom-nav">
             <div class="nav-item active" data-tab="home" onclick="switchTab(this)">
                 <i class="fas fa-home"></i>
@@ -344,7 +424,6 @@
         </div>
     </div>
 
-    <!-- Login Modal -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <h2 style="margin-bottom: 20px;">Login to HerbTrace</h2>
@@ -362,7 +441,6 @@
         </div>
     </div>
 
-    <!-- Signup Modal -->
     <div class="modal" id="signupModal">
         <div class="modal-content">
             <h2 style="margin-bottom: 20px;">Create Account</h2>
@@ -371,7 +449,7 @@
                 <input type="email" id="signupEmail" placeholder="your@email.com">
             </div>
             <div class="form-group">
-                <label>Password</label>
+                <label>Password (min 6 chars)</label>
                 <input type="password" id="signupPassword" placeholder="••••••••">
             </div>
             <div class="form-group">
@@ -384,8 +462,6 @@
                     <option value="consumer">Consumer / Enthusiast</option>
                     <option value="herbalist">Herbalist / Practitioner</option>
                     <option value="brand">Brand / Manufacturer</option>
-                    <option value="lab">Laboratory</option>
-                    <option value="farmer">Farmer / Grower</option>
                 </select>
             </div>
             <div id="signupError" class="error-message" style="display: none;"></div>
@@ -394,16 +470,6 @@
         </div>
     </div>
 
-    <!-- Rating Modal -->
-    <div class="modal" id="ratingModal">
-        <div class="modal-content">
-            <h3 id="ratingModalTitle">Thanks for voting! 🌿</h3>
-            <p id="ratingModalMessage">Your experience helps the community make informed decisions.</p>
-            <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" onclick="closeModal('ratingModal')">Close</button>
-        </div>
-    </div>
-
-    <!-- Create Post Modal -->
     <div class="modal" id="createPostModal">
         <div class="modal-content">
             <h2 style="margin-bottom: 20px;">Share Experience</h2>
@@ -422,33 +488,100 @@
                 <select id="postType">
                     <option value="experience">Personal Experience</option>
                     <option value="traditional">Traditional Knowledge</option>
-                    <option value="study">Scientific Study</option>
                     <option value="question">Question</option>
                 </select>
             </div>
+            <div id="postError" class="error-message" style="display: none;"></div>
             <button class="btn btn-primary" style="width: 100%; margin-bottom: 10px;" onclick="createPost()">Share Post</button>
             <button class="btn btn-outline" style="width: 100%;" onclick="closeModal('createPostModal')">Cancel</button>
         </div>
     </div>
 
+    <div class="modal" id="qrModal">
+        <div class="modal-content">
+            <h2 style="margin-bottom: 20px;">Scan Product QR</h2>
+            <div style="background: var(--background); height: 200px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; border: 2px dashed var(--border);">
+                <i class="fas fa-camera" style="font-size: 3rem; color: var(--text-light);"></i>
+            </div>
+            <p style="margin-bottom: 20px;">Scan a product QR code to verify batch authenticity.</p>
+            <div id="qrResult" style="margin-bottom: 15px;"></div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="simulateQRScan()">Simulate Scan</button>
+            <button class="btn btn-outline" style="width: 100%; margin-top: 10px;" onclick="closeModal('qrModal')">Close</button>
+        </div>
+    </div>
+
+    <div class="modal" id="ratingModal">
+        <div class="modal-content">
+            <h3 id="ratingModalTitle">Thanks for voting! 🌿</h3>
+            <p id="ratingModalMessage">Your experience helps the community.</p>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" onclick="closeModal('ratingModal')">Close</button>
+        </div>
+    </div>
+
     <script>
-        // Supabase configuration
-        const SUPABASE_URL = 'https://kfkjystvuumfbocqyvwl.supabase.co'; // REPLACE WITH YOUR URL
-        const SUPABASE_ANON_KEY = 'sb_publishable_MJi-Z9uOMPZtPn2hxUtWww_P9E_b9Zq'; // REPLACE WITH YOUR KEY
+        // ==================== CONFIGURATION ====================
+        const SUPABASE_URL = 'https://kfkjystvuumfbocqyvwl.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_MJi-Z9uOMPZtPn2hxUtWww_P9E_b9Zq';
         
-        // Initialize Supabase
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
-        // Global state
+        // ==================== GLOBAL STATE ====================
         let currentUser = null;
         let currentSession = null;
+        let isAdmin = false;
+        let searchTimeout = null;
 
-        // Check auth state on load
+        const DEMO_HERBS = [
+            { id: '1', name: 'Ashwagandha', scientific_name: 'Withania somnifera', description: 'Adaptogenic herb used for stress and anxiety.' },
+            { id: '2', name: 'Echinacea', scientific_name: 'Echinacea purpurea', description: 'Immune support and cold prevention.' },
+            { id: '3', name: 'Milk Thistle', scientific_name: 'Silybum marianum', description: 'Liver health and detoxification.' },
+            { id: '4', name: 'Turmeric', scientific_name: 'Curcuma longa', description: 'Anti-inflammatory and antioxidant.' },
+            { id: '5', name: 'Ginger', scientific_name: 'Zingiber officinale', description: 'Digestive health and nausea relief.' }
+        ];
+
+        const DEMO_POSTS = [
+            {
+                id: '1',
+                profiles: { username: 'Dr. Sarah', verified: true, user_type: 'herbalist' },
+                herbs: { name: 'Ashwagandha' },
+                content: "I've been prescribing Ashwagandha for stress for 10 years. Best results with consistent daily use for at least 4 weeks.",
+                created_at: new Date(Date.now() - 7200000).toISOString()
+            },
+            {
+                id: '2',
+                profiles: { username: 'Mike R.', verified: false, user_type: 'consumer' },
+                herbs: { name: 'Echinacea' },
+                content: 'Took Echinacea at first sign of cold symptoms. Felt better within 48 hours!',
+                created_at: new Date(Date.now() - 86400000).toISOString()
+            }
+        ];
+
+        // ==================== INITIALIZATION ====================
         document.addEventListener('DOMContentLoaded', async () => {
-            await checkUser();
-            await loadHerbsForSelect();
+            console.log('HerbTrace initializing...');
+            
+            setTimeout(() => {
+                if (document.querySelector('.loading')) {
+                    console.log('Loading timeout - showing demo feed');
+                    showDemoFeed();
+                }
+            }, 3000);
+            
+            try {
+                await checkUser();
+                await loadHerbsForSelect();
+                showDemoFeed();
+                
+                setTimeout(() => {
+                    loadFeed();
+                }, 100);
+            } catch (error) {
+                console.error('Initialization error:', error);
+                showDemoFeed();
+            }
         });
 
+        // ==================== AUTH FUNCTIONS ====================
         async function checkUser() {
             try {
                 const { data: { session }, error } = await supabase.auth.getSession();
@@ -459,49 +592,86 @@
                     currentSession = session;
                     currentUser = session.user;
                     
-                    // Update UI
                     document.getElementById('authButtons').style.display = 'none';
                     document.getElementById('userMenu').style.display = 'flex';
                     
-                    await loadFeed();
-                } else {
-                    document.getElementById('authButtons').style.display = 'flex';
-                    document.getElementById('userMenu').style.display = 'none';
-                    
-                    await loadPublicFeed();
+                    checkAdminStatus().catch(console.log);
                 }
             } catch (error) {
                 console.error('Auth check error:', error);
-                document.getElementById('feed').innerHTML = `
-                    <div class="welcome-message">
-                        <i class="fas fa-leaf" style="font-size: 3rem; color: var(--primary);"></i>
-                        <h3>Welcome to HerbTrace</h3>
-                        <p>A verified community for herbal wisdom</p>
-                        <button class="btn btn-primary" onclick="showModal('signupModal')" style="margin-top: 15px;">Join Now</button>
-                    </div>
-                `;
             }
         }
 
-        // Show modal
+        async function checkAdminStatus() {
+            if (!currentUser) return;
+            
+            try {
+                const { data, error } = await supabase
+                    .from('profiles')
+                    .select('is_admin')
+                    .eq('id', currentUser.id)
+                    .single();
+
+                if (!error && data?.is_admin) {
+                    isAdmin = true;
+                    addAdminBadge();
+                }
+            } catch (error) {
+                console.log('Admin check failed:', error.message);
+            }
+        }
+
+        function addAdminBadge() {
+            const userMenu = document.getElementById('userMenu');
+            if (document.querySelector('.admin-badge')) return;
+            
+            const adminBadge = document.createElement('span');
+            adminBadge.className = 'admin-badge';
+            adminBadge.innerHTML = '<i class="fas fa-crown"></i> Admin';
+            adminBadge.onclick = showAdminInfo;
+            userMenu.prepend(adminBadge);
+        }
+
+        // ==================== MODAL FUNCTIONS ====================
         function showModal(modalId) {
-            document.getElementById(modalId).classList.add('active');
-        }
-
-        // Close modal
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-            // Clear any error messages
-            const errorDiv = document.getElementById(modalId.replace('Modal', 'Error'));
-            if (errorDiv) {
-                errorDiv.style.display = 'none';
-                errorDiv.textContent = '';
+            document.querySelectorAll('.modal.active').forEach(modal => {
+                modal.classList.remove('active');
+            });
+            
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
             }
         }
 
-        // Handle login
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+                
+                const errorDiv = modal.querySelector('.error-message');
+                if (errorDiv) {
+                    errorDiv.style.display = 'none';
+                    errorDiv.textContent = '';
+                }
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            if (!toast) return;
+            
+            toast.textContent = message;
+            toast.style.background = type === 'success' ? 'var(--primary-dark)' : 'var(--danger)';
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // ==================== LOGIN ====================
         async function handleLogin() {
-            const email = document.getElementById('loginEmail').value;
+            const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
             const errorDiv = document.getElementById('loginError');
 
@@ -521,17 +691,19 @@
 
                 closeModal('loginModal');
                 await checkUser();
+                showToast('Login successful!');
+                showDemoFeed();
             } catch (error) {
                 errorDiv.textContent = error.message;
                 errorDiv.style.display = 'block';
             }
         }
 
-        // Handle signup
+        // ==================== SIGNUP ====================
         async function handleSignup() {
-            const email = document.getElementById('signupEmail').value;
+            const email = document.getElementById('signupEmail').value.trim();
             const password = document.getElementById('signupPassword').value;
-            const username = document.getElementById('signupUsername').value;
+            const username = document.getElementById('signupUsername').value.trim();
             const userType = document.getElementById('signupUserType').value;
             const errorDiv = document.getElementById('signupError');
 
@@ -561,317 +733,38 @@
 
                 if (error) throw error;
 
-                if (data.user) {
-                    // Create profile
-                    const { error: profileError } = await supabase
-                        .from('profiles')
-                        .insert([{ 
-                            id: data.user.id, 
-                            username: username,
-                            user_type: userType,
-                            trust_score: 50
-                        }]);
-
-                    if (profileError) throw profileError;
-                }
-
                 closeModal('signupModal');
-                alert('Account created! Please check your email for confirmation.');
-                await checkUser();
+                showToast('Account created! Please check your email for confirmation.');
             } catch (error) {
                 errorDiv.textContent = error.message;
                 errorDiv.style.display = 'block';
             }
         }
 
-        // Load herbs for select dropdown
-        async function loadHerbsForSelect() {
-            try {
-                const { data: herbs, error } = await supabase
-                    .from('herbs')
-                    .select('id, name')
-                    .order('name');
-
-                if (error) throw error;
-
-                const select = document.getElementById('postHerbId');
-                if (select) {
-                    select.innerHTML = '<option value="">Select an herb...</option>';
-                    herbs.forEach(herb => {
-                        select.innerHTML += `<option value="${herb.id}">${herb.name}</option>`;
-                    });
-                }
-            } catch (error) {
-                console.error('Error loading herbs:', error);
-            }
-        }
-
-        // Load feed
-        async function loadFeed() {
-            const feed = document.getElementById('feed');
-            feed.innerHTML = '<div class="loading">Loading community posts...</div>';
-
-            try {
-                const { data: posts, error } = await supabase
-                    .from('posts')
-                    .select(`
-                        *,
-                        profiles:user_id (
-                            username, 
-                            user_type, 
-                            verified, 
-                            trust_score
-                        ),
-                        herbs:herb_id (
-                            id,
-                            name, 
-                            scientific_name
-                        )
-                    `)
-                    .order('created_at', { ascending: false });
-
-                if (error) throw error;
-
-                if (!posts || posts.length === 0) {
-                    feed.innerHTML = `
-                        <div style="text-align: center; padding: 40px 20px;">
-                            <i class="fas fa-leaf" style="font-size: 3rem; color: var(--primary-light);"></i>
-                            <h3 style="margin: 15px 0;">No posts yet</h3>
-                            <p>Be the first to share your herbal experience!</p>
-                            <button class="btn btn-primary" onclick="showModal('createPostModal')" style="margin-top: 15px;">
-                                Create Post
-                            </button>
-                        </div>
-                    `;
-                    return;
-                }
-
-                renderFeed(posts);
-            } catch (error) {
-                console.error('Error loading feed:', error);
-                feed.innerHTML = '<div class="error-message" style="text-align: center;">Error loading feed. Please refresh.</div>';
-            }
-        }
-
-        async function loadPublicFeed() {
-            const feed = document.getElementById('feed');
+        // ==================== LOGOUT ====================
+        async function logout() {
+            await supabase.auth.signOut();
+            currentUser = null;
+            currentSession = null;
+            isAdmin = false;
             
-            try {
-                const { data: herbs, error } = await supabase
-                    .from('herbs')
-                    .select('*')
-                    .limit(5);
-
-                if (error) throw error;
-
-                if (!herbs || herbs.length === 0) {
-                    feed.innerHTML = `
-                        <div class="welcome-message">
-                            <i class="fas fa-leaf" style="font-size: 3rem; color: var(--primary);"></i>
-                            <h3>Welcome to HerbTrace</h3>
-                            <p>Join our community to discover and verify herbal remedies</p>
-                            <button class="btn btn-primary" onclick="showModal('signupModal')" style="margin-top: 15px;">Sign Up Now</button>
-                        </div>
-                    `;
-                    return;
-                }
-
-                let html = '<div style="padding: 10px;">';
-                html += '<h3 style="margin-bottom: 15px;">Popular Herbs 🌿</h3>';
-                
-                herbs.forEach(herb => {
-                    html += `
-                        <div class="post-card">
-                            <h4><i class="fas fa-leaf"></i> ${herb.name}</h4>
-                            <p><em>${herb.scientific_name || ''}</em></p>
-                            <p style="margin: 10px 0;">${herb.description || 'Traditional herb with various uses.'}</p>
-                            <button class="btn btn-primary" onclick="showModal('signupModal')">Join to Rate</button>
-                        </div>
-                    `;
-                });
-                
-                html += '</div>';
-                feed.innerHTML = html;
-            } catch (error) {
-                console.error('Error loading public feed:', error);
-                feed.innerHTML = '<div class="welcome-message">Welcome to HerbTrace! Please sign up to see content.</div>';
-            }
+            document.getElementById('authButtons').style.display = 'flex';
+            document.getElementById('userMenu').style.display = 'none';
+            
+            const adminBadge = document.querySelector('.admin-badge');
+            if (adminBadge) adminBadge.remove();
+            
+            showToast('Logged out successfully');
+            showDemoFeed();
         }
 
-        function renderFeed(posts) {
-            const feed = document.getElementById('feed');
-            feed.innerHTML = '';
-
-            // Add create post button for logged in users
-            if (currentUser) {
-                const createButton = document.createElement('div');
-                createButton.style.padding = '10px 0';
-                createButton.innerHTML = `
-                    <button class="btn btn-primary" style="width: 100%;" onclick="showModal('createPostModal')">
-                        <i class="fas fa-plus"></i> Share Your Experience
-                    </button>
-                `;
-                feed.appendChild(createButton);
-            }
-
-            posts.forEach(post => {
-                const postEl = document.createElement('div');
-                postEl.className = 'post-card';
-                
-                const username = post.profiles?.username || 'Anonymous';
-                const userType = post.profiles?.user_type || 'member';
-                const verified = post.profiles?.verified ? '<span class="verified-badge"><i class="fas fa-check"></i> Verified</span>' : '';
-                const herbName = post.herbs?.name || 'Herbal remedy';
-                
-                postEl.innerHTML = `
-                    <div class="post-header">
-                        <div class="avatar">${username.charAt(0).toUpperCase()}</div>
-                        <div>
-                            <h4>${username} ${verified}</h4>
-                            <small>${userType} · ${new Date(post.created_at).toLocaleDateString()}</small>
-                        </div>
-                    </div>
-                    <div class="herb-tag">
-                        <i class="fas fa-leaf"></i> ${herbName}
-                    </div>
-                    <p style="margin: 10px 0;">${post.content}</p>
-                    <div class="rating-section">
-                        <div class="rating-question">Is this herb working for you?</div>
-                        <div class="rating-buttons">
-                            <button class="rating-btn working" onclick="rateHerb('${post.herb_id}', 'working', this)">
-                                <i class="fas fa-check-circle"></i> Working
-                            </button>
-                            <button class="rating-btn not-working" onclick="rateHerb('${post.herb_id}', 'not_working', this)">
-                                <i class="fas fa-times-circle"></i> Not Working
-                            </button>
-                            <button class="rating-btn unsure" onclick="rateHerb('${post.herb_id}', 'unsure', this)">
-                                <i class="fas fa-question-circle"></i> Unsure
-                            </button>
-                        </div>
-                        <div class="rating-stats" id="stats-${post.herb_id}">
-                            Loading stats...
-                        </div>
-                    </div>
-                `;
-                feed.appendChild(postEl);
-                loadRatingStats(post.herb_id);
-            });
+        // ==================== UTILITY FUNCTIONS ====================
+        function sanitizeInput(input) {
+            if (!input) return '';
+            return String(input).replace(/[<>]/g, '');
         }
 
-        // Rate herb
-        async function rateHerb(herbId, rating, buttonElement) {
-            if (!currentUser) {
-                showModal('loginModal');
-                return;
-            }
-
-            try {
-                // Remove selected class from all buttons in this group
-                const container = buttonElement.closest('.rating-buttons');
-                container.querySelectorAll('.rating-btn').forEach(btn => {
-                    btn.classList.remove('selected');
-                });
-                
-                // Add selected class to clicked button
-                buttonElement.classList.add('selected');
-
-                const { error } = await supabase
-                    .from('herb_ratings')
-                    .upsert({
-                        user_id: currentUser.id,
-                        herb_id: herbId,
-                        rating: rating
-                    }, {
-                        onConflict: 'user_id, herb_id'
-                    });
-
-                if (error) throw error;
-
-                // Show success modal
-                document.getElementById('ratingModalTitle').innerHTML = 'Thanks for voting! 🌿';
-                document.getElementById('ratingModalMessage').innerHTML = 'Your experience helps the community.';
-                showModal('ratingModal');
-                
-                loadRatingStats(herbId);
-            } catch (error) {
-                console.error('Error rating herb:', error);
-                alert('Error saving rating: ' + error.message);
-            }
-        }
-
-        // Load rating stats
-        async function loadRatingStats(herbId) {
-            try {
-                const { data, error } = await supabase
-                    .from('herb_ratings')
-                    .select('rating')
-                    .eq('herb_id', herbId);
-
-                if (error) throw error;
-
-                const total = data.length;
-                if (total === 0) {
-                    const statsEl = document.getElementById(`stats-${herbId}`);
-                    if (statsEl) {
-                        statsEl.innerHTML = '<span>No ratings yet. Be the first!</span>';
-                    }
-                    return;
-                }
-
-                const working = data.filter(r => r.rating === 'working').length;
-                const notWorking = data.filter(r => r.rating === 'not_working').length;
-                const unsure = data.filter(r => r.rating === 'unsure').length;
-
-                const workingPct = Math.round((working / total) * 100);
-                const notWorkingPct = Math.round((notWorking / total) * 100);
-                const unsurePct = Math.round((unsure / total) * 100);
-
-                const statsEl = document.getElementById(`stats-${herbId}`);
-                if (statsEl) {
-                    statsEl.innerHTML = `
-                        <span><i class="fas fa-check-circle" style="color: var(--success);"></i> ${workingPct}% (${working})</span>
-                        <span><i class="fas fa-times-circle" style="color: var(--danger);"></i> ${notWorkingPct}% (${notWorking})</span>
-                        <span><i class="fas fa-question-circle" style="color: var(--warning);"></i> ${unsurePct}% (${unsure})</span>
-                    `;
-                }
-            } catch (error) {
-                console.error('Error loading stats:', error);
-            }
-        }
-
-        // Create post
-        async function createPost() {
-            const herbId = document.getElementById('postHerbId').value;
-            const content = document.getElementById('postContent').value;
-            const postType = document.getElementById('postType').value;
-
-            if (!herbId || !content) {
-                alert('Please select an herb and enter your experience');
-                return;
-            }
-
-            try {
-                const { error } = await supabase
-                    .from('posts')
-                    .insert([{
-                        user_id: currentUser.id,
-                        herb_id: herbId,
-                        content: content,
-                        post_type: postType
-                    }]);
-
-                if (error) throw error;
-
-                closeModal('createPostModal');
-                document.getElementById('postContent').value = '';
-                await loadFeed();
-            } catch (error) {
-                console.error('Error creating post:', error);
-                alert('Error creating post: ' + error.message);
-            }
-        }
-
-        // Switch tabs
+        // ==================== TAB SWITCHING ====================
         function switchTab(tabElement) {
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
@@ -881,29 +774,360 @@
             const tab = tabElement.getAttribute('data-tab');
             
             if (tab === 'scan') {
-                alert('📱 Scan feature: Point camera at product QR code to verify batch authenticity');
+                showModal('qrModal');
             } else if (tab === 'profile') {
-                if (!currentUser) {
-                    showModal('loginModal');
-                } else {
-                    alert('Profile page coming soon!');
-                }
+                handleProfileTab();
             } else if (tab === 'explore') {
-                loadPublicFeed();
+                loadExplore();
             } else if (tab === 'home') {
-                if (currentUser) {
-                    loadFeed();
-                } else {
-                    loadPublicFeed();
-                }
+                showDemoFeed();
+            }
+        }
+
+        function handleProfileTab() {
+            if (!currentUser) {
+                showModal('loginModal');
+            } else {
+                showProfile();
             }
         }
 
         function showProfile() {
+            if (!currentUser) {
+                showModal('loginModal');
+                return;
+            }
+            
+            const feed = document.getElementById('feed');
+            feed.innerHTML = `
+                <div class="post-card">
+                    <h3><i class="fas fa-user-circle"></i> User Profile</h3>
+                    <p><strong>Email:</strong> ${currentUser.email}</p>
+                    <p><strong>User ID:</strong> ${currentUser.id.substring(0, 8)}...</p>
+                    <p><strong>Admin:</strong> ${isAdmin ? 'Yes' : 'No'}</p>
+                    <button class="btn btn-danger" style="width: 100%; margin-top: 15px;" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            `;
+        }
+
+        function showAdminInfo() {
+            showToast('Admin Dashboard - Feature coming soon!', 'success');
+        }
+
+        // ==================== LOAD FEED ====================
+        async function loadFeed() {
+            if (!currentUser) return;
+            
+            try {
+                const { data: posts, error } = await supabase
+                    .from('posts')
+                    .select(`
+                        *,
+                        profiles:user_id (username, user_type, verified),
+                        herbs:herb_id (name)
+                    `)
+                    .order('created_at', { ascending: false })
+                    .limit(20);
+
+                if (error) throw error;
+
+                if (posts && posts.length > 0) {
+                    renderFeed(posts);
+                }
+            } catch (error) {
+                console.log('Could not load real posts:', error.message);
+            }
+        }
+
+        function showDemoFeed() {
+            const feed = document.getElementById('feed');
+            
+            let html = '';
+            
+            if (!currentUser) {
+                html += `
+                    <div style="margin-bottom: 15px;">
+                        <button class="btn btn-primary" style="width: 100%;" onclick="showModal('signupModal')">
+                            <i class="fas fa-leaf"></i> Join HerbTrace
+                        </button>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div style="margin-bottom: 15px;">
+                        <button class="btn btn-primary" style="width: 100%;" onclick="showModal('createPostModal')">
+                            <i class="fas fa-plus"></i> Share Your Experience
+                        </button>
+                    </div>
+                `;
+            }
+            
+            DEMO_POSTS.forEach(post => {
+                html += renderPostCard(post);
+            });
+            
+            feed.innerHTML = html;
+        }
+
+        function renderPostCard(post) {
+            const username = post.profiles?.username || 'Anonymous';
+            const verified = post.profiles?.verified ? '<span class="verified-badge"><i class="fas fa-check"></i> Verified</span>' : '';
+            const herbName = post.herbs?.name || 'Herbal remedy';
+            const date = new Date(post.created_at).toLocaleDateString();
+            
+            return `
+                <div class="post-card">
+                    <div class="post-header">
+                        <div class="avatar">${sanitizeInput(username.charAt(0).toUpperCase())}</div>
+                        <div>
+                            <h4>${sanitizeInput(username)} ${verified}</h4>
+                            <small>${date}</small>
+                        </div>
+                    </div>
+                    <span class="herb-tag"><i class="fas fa-leaf"></i> ${sanitizeInput(herbName)}</span>
+                    <p style="margin: 15px 0;">${sanitizeInput(post.content)}</p>
+                    
+                    <div class="rating-section">
+                        <div class="rating-question">Is this herb working for you?</div>
+                        <div class="rating-buttons">
+                            <button class="rating-btn working" onclick="rateHerb('${sanitizeInput(herbName)}')">
+                                <i class="fas fa-check-circle"></i> Working
+                            </button>
+                            <button class="rating-btn not-working" onclick="rateHerb('${sanitizeInput(herbName)}')">
+                                <i class="fas fa-times-circle"></i> Not Working
+                            </button>
+                            <button class="rating-btn unsure" onclick="rateHerb('${sanitizeInput(herbName)}')">
+                                <i class="fas fa-question-circle"></i> Unsure
+                            </button>
+                        </div>
+                        <div class="rating-stats">
+                            <span><i class="fas fa-check-circle" style="color: var(--success);"></i> 78% (demo)</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderFeed(posts) {
+            const feed = document.getElementById('feed');
+            let html = '';
+            
             if (currentUser) {
-                alert(`Logged in as: ${currentUser.email}\nUser ID: ${currentUser.id}`);
+                html += `
+                    <div style="margin-bottom: 15px;">
+                        <button class="btn btn-primary" style="width: 100%;" onclick="showModal('createPostModal')">
+                            <i class="fas fa-plus"></i> Share Your Experience
+                        </button>
+                    </div>
+                `;
+            }
+
+            posts.forEach(post => {
+                html += renderPostCard(post);
+            });
+
+            feed.innerHTML = html;
+        }
+
+        // ==================== EXPLORE ====================
+        async function loadExplore() {
+            showDemoExplore();
+            
+            try {
+                const { data: herbs, error } = await supabase
+                    .from('herbs')
+                    .select('*')
+                    .order('name');
+
+                if (error) throw error;
+
+                if (herbs && herbs.length > 0) {
+                    renderExplore(herbs);
+                }
+            } catch (error) {
+                console.log('Could not load real herbs:', error.message);
+            }
+        }
+
+        function renderExplore(herbs) {
+            const feed = document.getElementById('feed');
+            let html = '<h3 style="margin-bottom: 15px;">🌿 Herb Library</h3>';
+            
+            herbs.forEach(herb => {
+                html += `
+                    <div class="post-card">
+                        <h4><i class="fas fa-leaf" style="color: var(--primary);"></i> ${sanitizeInput(herb.name)}</h4>
+                        <p><em>${herb.scientific_name ? sanitizeInput(herb.scientific_name) : 'No scientific name'}</em></p>
+                        <p>${herb.description ? sanitizeInput(herb.description) : 'No description available.'}</p>
+                        ${!currentUser ? '<button class="btn btn-primary btn-sm" style="margin-top: 10px;" onclick="showModal(\'loginModal\')">Login to Rate</button>' : ''}
+                    </div>
+                `;
+            });
+            
+            feed.innerHTML = html;
+        }
+
+        function showDemoExplore() {
+            const feed = document.getElementById('feed');
+            let html = '<h3 style="margin-bottom: 15px;">🌿 Popular Herbs</h3>';
+            
+            DEMO_HERBS.forEach(herb => {
+                html += `
+                    <div class="post-card">
+                        <h4><i class="fas fa-leaf" style="color: var(--primary);"></i> ${herb.name}</h4>
+                        <p><em>${herb.scientific_name}</em></p>
+                        <p>${herb.description}</p>
+                        ${!currentUser ? '<button class="btn btn-primary btn-sm" style="margin-top: 10px;" onclick="showModal(\'loginModal\')">Login to Rate</button>' : ''}
+                    </div>
+                `;
+            });
+            
+            feed.innerHTML = html;
+        }
+
+        // ==================== RATING FUNCTION ====================
+        function rateHerb(herbName) {
+            if (!currentUser) {
+                showModal('loginModal');
+                return;
+            }
+            
+            document.getElementById('ratingModalTitle').innerHTML = `Thanks for rating ${herbName}! 🌿`;
+            document.getElementById('ratingModalMessage').innerHTML = 'Your experience helps the community.';
+            showModal('ratingModal');
+        }
+
+        // ==================== SEARCH ====================
+        function handleSearchInput() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                performSearch();
+            }, 500);
+        }
+
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            
+            if (searchTerm.length < 2) {
+                return;
+            }
+
+            showDemoSearchResults(searchTerm);
+        }
+
+        function showDemoSearchResults(searchTerm) {
+            const filteredHerbs = DEMO_HERBS.filter(herb => 
+                herb.name.toLowerCase().includes(searchTerm)
+            );
+            
+            const feed = document.getElementById('feed');
+            
+            if (filteredHerbs.length > 0) {
+                let html = `
+                    <div class="post-card">
+                        <h4>Search Results for "${sanitizeInput(searchTerm)}"</h4>
+                        <p>Found ${filteredHerbs.length} matching herb${filteredHerbs.length !== 1 ? 's' : ''}:</p>
+                        <ul style="margin-top: 10px; list-style: none;">
+                `;
+                
+                filteredHerbs.forEach(herb => {
+                    html += `<li style="margin-bottom: 8px;"><i class="fas fa-leaf" style="color: var(--primary);"></i> ${herb.name}</li>`;
+                });
+                
+                html += `
+                        </ul>
+                        <button class="btn btn-primary btn-sm" style="margin-top: 15px;" onclick="showDemoFeed()">Back to Feed</button>
+                    </div>
+                `;
+                
+                feed.innerHTML = html;
+            } else {
+                feed.innerHTML = `
+                    <div class="post-card">
+                        <h4>No results for "${sanitizeInput(searchTerm)}"</h4>
+                        <p>Try searching for: Ashwagandha, Echinacea, Turmeric, Ginger, or Milk Thistle</p>
+                        <button class="btn btn-primary btn-sm" style="margin-top: 15px;" onclick="showDemoFeed()">Back to Feed</button>
+                    </div>
+                `;
+            }
+        }
+
+        // ==================== QR FUNCTIONS ====================
+        function simulateQRScan() {
+            document.getElementById('qrResult').innerHTML = `
+                <div class="success-message">
+                    <h4>✅ Batch Verified!</h4>
+                    <p>Batch: ASHW-2025-03</p>
+                    <p>Harvested: March 2025</p>
+                    <p>Location: India</p>
+                    <p>Lab Tested: Eurofins</p>
+                </div>
+            `;
+        }
+
+        // ==================== CREATE POST ====================
+        function createPost() {
+            const herbId = document.getElementById('postHerbId').value;
+            const content = document.getElementById('postContent').value.trim();
+            const errorDiv = document.getElementById('postError');
+
+            if (!herbId) {
+                errorDiv.textContent = 'Please select an herb';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            if (!content) {
+                errorDiv.textContent = 'Please enter your experience';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            if (content.length < 10) {
+                errorDiv.textContent = 'Please write at least 10 characters';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            if (!currentUser) {
+                closeModal('createPostModal');
+                showModal('loginModal');
+                return;
+            }
+
+            closeModal('createPostModal');
+            showToast('Post created! (Demo mode)');
+            document.getElementById('postContent').value = '';
+        }
+
+        // ==================== LOAD HERBS FOR SELECT ====================
+        async function loadHerbsForSelect() {
+            const select = document.getElementById('postHerbId');
+            if (!select) return;
+
+            select.innerHTML = DEMO_HERBS.map(herb => 
+                `<option value="${herb.id}">${herb.name}</option>`
+            ).join('');
+            
+            try {
+                const { data: herbs, error } = await supabase
+                    .from('herbs')
+                    .select('id, name')
+                    .order('name');
+
+                if (error) throw error;
+
+                if (herbs && herbs.length > 0) {
+                    select.innerHTML = herbs.map(herb => 
+                        `<option value="${herb.id}">${sanitizeInput(herb.name)}</option>`
+                    ).join('');
+                }
+            } catch (error) {
+                console.log('Could not load real herbs for select:', error.message);
             }
         }
     </script>
 </body>
-</html>
+                    </html>
