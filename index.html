@@ -21,7 +21,6 @@
       --danger: #c74242;
       --success: #28a745;
     }
-
     [data-theme="dark"] {
       --bg: #121212;
       --card: #1e1e1e;
@@ -29,9 +28,7 @@
       --text-light: #a0a0a0;
       --border: #333;
     }
-
     * { margin:0; padding:0; box-sizing:border-box; }
-
     body {
       background: var(--bg);
       color: var(--text);
@@ -40,9 +37,7 @@
       min-height: 100vh;
       display: flex;
       justify-content: center;
-      touch-action: manipulation; /* better mobile feel */
     }
-
     .app-container {
       width: 100%;
       max-width: 720px;
@@ -50,116 +45,115 @@
       min-height: 100vh;
       box-shadow: 0 0 40px rgba(0,0,0,0.06);
     }
-
-    .header {
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: var(--card);
-      position: sticky;
-      top: 0;
-      z-index: 90;
-    }
-
+    .header { padding: 14px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; background: var(--card); position: sticky; top: 0; z-index: 90; }
     .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 8px; }
-
     .auth-status { margin-left: auto; display: flex; align-items: center; gap: 14px; }
-
-    .user-email {
-      font-size: 0.9rem;
-      color: var(--text-light);
-      max-width: 180px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
+    .user-email { font-size: 0.9rem; color: var(--text-light); max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .auth-btn {
-      background: #eef4fc;
-      color: var(--primary);
-      border: 1px solid #d0e0f5;
-      border-radius: 999px;
-      padding: 8px 20px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
+      background: #eef4fc; color: var(--primary); border: 1px solid #d0e0f5;
+      border-radius: 999px; padding: 8px 20px; font-weight: 600; cursor: pointer; transition: all 0.2s;
     }
-
     .auth-btn:hover { background: #e2ebf9; }
     .auth-btn.logout { background: #fff5f5; color: var(--danger); border-color: #ffdede; }
-
     .main { padding: 24px 20px; }
 
-    .toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #333;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 12px;
-      z-index: 300;
-      opacity: 0;
-      transition: opacity 0.4s, transform 0.4s;
-      max-width: 90%;
-      text-align: center;
+    /* NEW: Filters */
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .filter-btn {
+      padding: 8px 18px; border-radius: 999px; background: var(--border); border: none;
+      font-size: 0.9rem; cursor: pointer; transition: all 0.2s;
+    }
+    .filter-btn.active { background: var(--primary); color: white; }
+
+    /* Blog cards */
+    .blog-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      margin-bottom: 24px; overflow: hidden; box-shadow: var(--shadow-sm); transition: all 0.2s;
+    }
+    .blog-card:hover { box-shadow: var(--shadow-md); }
+    .blog-card.expanded { box-shadow: var(--shadow-md); }
+    .card-header { padding: 16px; display: flex; gap: 12px; }
+    .blog-avatar {
+      width: 48px; height: 48px; border-radius: 50%; background: var(--primary); color: white;
+      display: grid; place-items: center; font-weight: bold; font-size: 1.3rem; flex-shrink: 0;
+      background-size: cover; background-position: center;
+    }
+    .blog-meta { flex: 1; }
+    .blog-meta h4 { font-size: 1.05rem; font-weight: 700; margin-bottom: 2px; }
+    .blog-meta-row { display: flex; gap: 8px; font-size: 0.85rem; color: var(--text-light); }
+    .category-badge { background: #eef4fc; color: var(--primary); padding: 2px 10px; border-radius: 999px; font-size: 0.8rem; }
+    .blog-content-preview, .blog-content-full {
+      padding: 0 16px 16px; font-size: 1rem; line-height: 1.5;
+    }
+    .blog-content-full { display: none; }
+    .blog-card.expanded .blog-content-preview { display: none; }
+    .blog-card.expanded .blog-content-full { display: block; }
+    .blog-image { width: 100%; display: block; margin-top: 8px; }
+    .card-footer {
+      padding: 12px 16px; border-top: 1px solid var(--border);
+      font-size: 0.85rem; color: var(--text-light); display: flex; gap: 12px;
+    }
+    .admin-actions { padding: 12px; text-align: right; }
+    .delete-btn {
+      background: none; border: 1px solid var(--danger); color: var(--danger);
+      padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; cursor: pointer;
     }
 
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(-8px); }
+    /* Admin panel */
+    .admin-panel {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 20px; margin-bottom: 32px;
+    }
+    .admin-panel-header { display: flex; gap: 12px; align-items: center; margin-bottom: 20px; }
+    .admin-avatar-large {
+      width: 56px; height: 56px; border-radius: 50%; background: var(--primary);
+      color: white; display: grid; place-items: center; font-size: 1.6rem; font-weight: bold;
+    }
+    .url-input, #postContent, #postCategory {
+      width: 100%; padding: 12px; border: 1px solid var(--border);
+      border-radius: 12px; margin-bottom: 12px; font-family: inherit;
+    }
+    #postContent { min-height: 140px; resize: vertical; }
+    .char-count { text-align: right; font-size: 0.85rem; color: var(--text-light); margin-bottom: 12px; }
+    .post-actions { display: flex; gap: 12px; }
+    .btn {
+      flex: 1; padding: 12px; border-radius: 12px; font-weight: 600; cursor: pointer; border: none;
+    }
+    .btn-secondary { background: var(--border); color: var(--text); }
+    .btn-primary { background: var(--primary); color: white; }
+    .test-url-btn { background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 12px; margin-bottom: 12px; }
+    #urlPreview { max-width: 100%; border-radius: 12px; margin: 12px 0; display: none; }
 
+    /* Modal */
+    .modal {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.65); display: none;
+      align-items: center; justify-content: center; z-index: 200;
+    }
+    .modal-content {
+      background: var(--card); padding: 28px; border-radius: var(--radius);
+      width: 90%; max-width: 360px; box-shadow: var(--shadow-md);
+    }
+    .modal input {
+      width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    .modal button { width: 100%; margin-bottom: 8px; }
+
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      background: #333; color: white; padding: 12px 24px; border-radius: 12px;
+      z-index: 300; opacity: 0; transition: all 0.4s; max-width: 90%;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(-8px); }
     .toast.success { background: var(--success); }
     .toast.error   { background: var(--danger); }
 
-    /* Rest of your existing styles remain mostly the same... */
-    /* ... I'll only show changed/new parts for brevity */
-
-    .blog-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: var(--primary);
-      color: white;
-      display: grid;
-      place-items: center;
-      font-weight: bold;
-      font-size: 1.3rem;
-      flex-shrink: 0;
-      background-size: cover;
-      background-position: center;
-    }
-
-    .blog-meta h4 { font-size: 1.05rem; font-weight: 700; margin-bottom: 2px; }
-
-    .admin-panel { display: none; }
-
-    .loading-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(255,255,255,0.7);
-      display: grid;
-      place-items: center;
-      z-index: 10;
-      border-radius: var(--radius);
-    }
-
-    [data-theme="dark"] .loading-overlay { background: rgba(30,30,30,0.7); }
-
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 5px solid #f3f3f3;
-      border-top: 5px solid var(--primary);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
+    .empty-feed { text-align: center; padding: 60px 20px; color: var(--text-light); }
+    .spinner { width: 40px; height: 40px; border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 12px; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     @media (max-width: 480px) {
-      .main { padding: 16px 16px; }
+      .main { padding: 16px; }
       .header { padding: 12px 16px; }
     }
   </style>
@@ -167,35 +161,25 @@
 <body>
 
 <div class="app-container">
-
   <div class="header">
-    <div class="logo">
-      <i class="fab fa-linkedin"></i>
-      <span>Blog</span>
-    </div>
+    <div class="logo"><i class="fab fa-linkedin"></i><span>Blog</span></div>
     <div class="auth-status">
       <span class="user-email" id="userEmail"></span>
       <button class="auth-btn" id="authBtn">Sign In</button>
-      <button class="auth-btn" id="themeToggle" style="padding:8px 12px; min-width:unset;">
-        <i class="fas fa-moon"></i>
-      </button>
+      <button class="auth-btn" id="themeToggle" style="padding:8px 12px; min-width:unset;"><i class="fas fa-moon"></i></button>
     </div>
   </div>
 
   <div class="main">
-
-    <div id="adminPanel" class="admin-panel">
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="admin-panel" style="display:none;">
       <div class="admin-panel-header">
         <div class="admin-avatar-large" id="adminAvatar">A</div>
-        <div>
-          <h3>Create Post</h3>
-          <p style="color:var(--text-light);">Share your thoughts</p>
-        </div>
+        <div><h3>Create Post</h3><p style="color:var(--text-light);">Share your thoughts</p></div>
       </div>
-
       <input type="url" id="imageUrlInput" class="url-input" placeholder="https://example.com/image.jpg (optional)" />
       <button class="test-url-btn" id="testUrlBtn"><i class="fas fa-eye"></i> Preview</button>
-      <img id="urlPreview" src="" alt="Image preview" style="display:none;" />
+      <img id="urlPreview" src="" alt="Image preview" />
 
       <textarea id="postContent" placeholder="What would you like to share? (supports **bold**, *italic*, [link](url))" maxlength="2000"></textarea>
       <div class="char-count" id="charCount">0 / 2000</div>
@@ -213,30 +197,38 @@
       </div>
     </div>
 
-    <!-- Feed header + filters (unchanged except minor spacing) -->
-
-    <div id="blogFeed">
-      <div class="empty-feed">
-        <div class="loading-spinner" style="width:32px;height:32px;"></div>
-        <p>Loading posts...</p>
-      </div>
+    <!-- Filters -->
+    <div class="filters" id="categoryFilters">
+      <button data-cat="all" class="filter-btn active">All</button>
+      <button data-cat="Tech" class="filter-btn">Tech</button>
+      <button data-cat="Lifestyle" class="filter-btn">Lifestyle</button>
+      <button data-cat="Business" class="filter-btn">Business</button>
+      <button data-cat="Other" class="filter-btn">Other</button>
     </div>
 
+    <div id="blogFeed">
+      <div class="empty-feed"><div class="spinner"></div><p>Loading posts...</p></div>
+    </div>
   </div>
-
-  <!-- Auth Modal (unchanged for brevity) -->
-
-  <div id="toast" class="toast"></div>
-
 </div>
 
+<!-- Auth Modal -->
+<div id="authModal" class="modal">
+  <div class="modal-content">
+    <h3 id="modalTitle">Sign In</h3>
+    <input type="email" id="emailInput" placeholder="Email" />
+    <input type="password" id="passwordInput" placeholder="Password" />
+    <button class="btn btn-primary" id="signInBtn">Sign In</button>
+    <button class="btn btn-secondary" id="signUpBtn">Create Account</button>
+    <button class="btn btn-secondary" id="closeModal">Cancel</button>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
 <script>
-  // ────────────────────────────────────────────────
-  //  CONFIG & STATE
-  // ────────────────────────────────────────────────
   const SUPABASE_URL = 'https://msbtxocygbfpnjormhav.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_czos3mPNcvXkliq7dVVPkg_8ZXifAXB';
-
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   let currentUser = null;
@@ -262,11 +254,14 @@
     adminAvatar: document.getElementById('adminAvatar'),
     themeToggle: document.getElementById('themeToggle'),
     toast: document.getElementById('toast'),
+    authModal: document.getElementById('authModal'),
+    emailInput: document.getElementById('emailInput'),
+    passwordInput: document.getElementById('passwordInput'),
+    signInBtn: document.getElementById('signInBtn'),
+    signUpBtn: document.getElementById('signUpBtn'),
+    closeModal: document.getElementById('closeModal'),
   };
 
-  // ────────────────────────────────────────────────
-  //  HELPERS
-  // ────────────────────────────────────────────────
   function showToast(message, type = 'info') {
     els.toast.textContent = message;
     els.toast.className = `toast ${type} show`;
@@ -275,13 +270,12 @@
 
   function formatRelativeTime(ts) {
     if (!ts) return 'recent';
-    const date = new Date(ts);
-    const diff = Date.now() - date;
+    const diff = Date.now() - new Date(ts);
     const min = Math.floor(diff / 60000);
     if (min < 1) return 'just now';
     if (min < 60) return `${min}m ago`;
     if (min < 1440) return `${Math.floor(min / 60)}h ago`;
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   }
 
   function escapeHtml(text) {
@@ -302,23 +296,14 @@
     try {
       const u = new URL(url);
       return /^https?:$/.test(u.protocol) && /\.(jpe?g|png|gif|webp)$/i.test(u.pathname);
-    } catch {
-      return false;
-    }
+    } catch { return false; }
   }
 
-  // ────────────────────────────────────────────────
-  //  RENDER
-  // ────────────────────────────────────────────────
   function renderFeed() {
     const filtered = activeCategory === 'all' ? posts : posts.filter(p => p.category === activeCategory);
 
     if (filtered.length === 0) {
-      els.blogFeed.innerHTML = `
-        <div class="empty-feed">
-          <i class="far fa-newspaper" style="font-size:2.4rem; opacity:0.6;"></i>
-          <p>No posts ${activeCategory !== 'all' ? 'in ' + activeCategory : 'yet'}.</p>
-        </div>`;
+      els.blogFeed.innerHTML = `<div class="empty-feed"><i class="far fa-newspaper" style="font-size:2.4rem; opacity:0.6;"></i><p>No posts ${activeCategory !== 'all' ? 'in ' + activeCategory : 'yet'}.</p></div>`;
       return;
     }
 
@@ -339,46 +324,21 @@
               </div>
             </div>
           </div>
-          <div class="blog-content-preview">${simpleMarkdown(escapeHtml(post.content.slice(0, 280)))}</div>
+          <div class="blog-content-preview">${simpleMarkdown(escapeHtml(post.content.slice(0, 280)))}...</div>
           <div class="blog-content-full">${simpleMarkdown(escapeHtml(post.content))}</div>
           ${post.imageurl ? `<img class="blog-image" src="${escapeHtml(post.imageurl)}" alt="Post image" loading="lazy">` : ''}
           <div class="card-footer">
             <span><i class="fas fa-chevron-down"></i> Tap to ${post.expanded ? 'collapse' : 'expand'}</span>
             ${post.imageurl ? '<span><i class="far fa-image"></i> Image</span>' : '<span>Text only</span>'}
           </div>
-          ${isOwner ? `
-            <div class="admin-actions">
-              <button class="delete-btn" data-id="${post.id}">
-                <i class="far fa-trash-alt"></i> Delete
-              </button>
-            </div>` : ''}
+          ${isOwner ? `<div class="admin-actions"><button class="delete-btn" data-id="${post.id}"><i class="far fa-trash-alt"></i> Delete</button></div>` : ''}
         </div>`;
     }).join('');
-
-    // Event delegation for expand/collapse + delete
-    els.blogFeed.addEventListener('click', e => {
-      const card = e.target.closest('.blog-card');
-      if (!card) return;
-
-      if (e.target.closest('.delete-btn')) {
-        e.stopPropagation();
-        const id = e.target.closest('.delete-btn').dataset.id;
-        if (confirm('Delete this post?')) deletePost(id);
-        return;
-      }
-
-      card.classList.toggle('expanded');
-    });
   }
 
-  // ────────────────────────────────────────────────
-  //  DATA OPERATIONS
-  // ────────────────────────────────────────────────
   async function loadPosts() {
-    els.blogFeed.innerHTML = `<div class="empty-feed"><div class="spinner"></div><p>Loading...</p></div>`;
-
+    els.blogFeed.innerHTML = `<div class="empty-feed"><div class="spinner"></div><p>Loading posts...</p></div>`;
     try {
-      // Join with profiles table (you need to create a profiles table or adjust query)
       const { data, error } = await supabase
         .from('posts')
         .select(`
@@ -410,14 +370,9 @@
 
     try {
       const { error } = await supabase.from('posts').insert({
-        content,
-        category: els.postCategory.value,
-        imageurl,
-        user_id: currentUser.id
+        content, category: els.postCategory.value, imageurl, user_id: currentUser.id
       });
-
       if (error) throw error;
-
       showToast('Post published!', 'success');
       resetForm();
       await loadPosts();
@@ -430,6 +385,7 @@
   }
 
   async function deletePost(id) {
+    if (!confirm('Delete this post?')) return;
     try {
       const { error } = await supabase.from('posts').delete().eq('id', id).eq('user_id', currentUser.id);
       if (error) throw error;
@@ -448,9 +404,6 @@
     els.publishBtn.disabled = true;
   }
 
-  // ────────────────────────────────────────────────
-  //  AUTH & UI
-  // ────────────────────────────────────────────────
   function updateAuthUI() {
     if (currentUser) {
       const name = currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User';
@@ -459,7 +412,6 @@
       els.authBtn.classList.add('logout');
       els.adminPanel.style.display = 'block';
 
-      // Admin avatar
       const avatarUrl = currentUser.user_metadata?.avatar_url;
       if (avatarUrl) {
         els.adminAvatar.style.backgroundImage = `url('${avatarUrl}')`;
@@ -475,59 +427,116 @@
     }
   }
 
-  // ────────────────────────────────────────────────
-  //  EVENT LISTENERS (only new/changed shown)
-  // ────────────────────────────────────────────────
-  let previewTimeout;
-  els.testUrlBtn.addEventListener('click', () => {
-    clearTimeout(previewTimeout);
-    const url = els.imageUrlInput.value.trim();
-    if (!url) return;
-
-    previewTimeout = setTimeout(async () => {
-      if (!isValidImageUrl(url)) {
-        showToast('Invalid image URL', 'error');
-        return;
-      }
-      els.urlPreview.src = url;
-      els.urlPreview.style.display = 'block';
-      els.urlPreview.onerror = () => {
-        showToast('Could not load image', 'error');
-        els.urlPreview.style.display = 'none';
-      };
-    }, 600);
-  });
-
-  els.themeToggle.addEventListener('click', () => {
-    const current = document.documentElement.dataset.theme;
-    const next = current === 'dark' ? '' : 'dark';
-    document.documentElement.dataset.theme = next;
-    els.themeToggle.innerHTML = next === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-    localStorage.setItem('theme', next);
-  });
-
-  // Restore theme
-  if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-    document.documentElement.dataset.theme = 'dark';
-    els.themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+  function handleFeedClick(e) {
+    const card = e.target.closest('.blog-card');
+    if (!card) return;
+    if (e.target.closest('.delete-btn')) {
+      e.stopPropagation();
+      deletePost(e.target.closest('.delete-btn').dataset.id);
+      return;
+    }
+    card.classList.toggle('expanded');
   }
 
-  // Rest of your auth, publish, filter listeners remain similar...
-  // Just replace alert() with showToast() where appropriate
+  // ────────────────────────────── EVENT LISTENERS ──────────────────────────────
+  els.postContent.addEventListener('input', () => {
+    const len = els.postContent.value.length;
+    els.charCount.textContent = `${len} / ${MAX_CONTENT_LENGTH}`;
+    els.publishBtn.disabled = len === 0 || len > MAX_CONTENT_LENGTH;
+  });
 
-  // INIT
+  els.publishBtn.addEventListener('click', createPost);
+  els.cancelPostBtn.addEventListener('click', resetForm);
+
+  els.testUrlBtn.addEventListener('click', () => {
+    const url = els.imageUrlInput.value.trim();
+    if (!url || !isValidImageUrl(url)) return showToast('Invalid image URL', 'error');
+    els.urlPreview.src = url;
+    els.urlPreview.style.display = 'block';
+    els.urlPreview.onerror = () => { showToast('Could not load image', 'error'); els.urlPreview.style.display = 'none'; };
+  });
+
+  // Theme
+  els.themeToggle.addEventListener('click', () => {
+    const isDark = document.documentElement.dataset.theme === 'dark';
+    document.documentElement.dataset.theme = isDark ? '' : 'dark';
+    els.themeToggle.innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+    localStorage.setItem('theme', isDark ? '' : 'dark');
+  });
+
+  // Filters
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeCategory = btn.dataset.cat;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === activeCategory));
+      renderFeed();
+    });
+  });
+
+  // Auth modal
+  function showAuthModal() { els.authModal.style.display = 'flex'; }
+  function hideAuthModal() { els.authModal.style.display = 'none'; els.emailInput.value = els.passwordInput.value = ''; }
+
+  els.authBtn.addEventListener('click', async () => {
+    if (currentUser) {
+      await supabase.auth.signOut();
+    } else {
+      showAuthModal();
+    }
+  });
+
+  els.signInBtn.addEventListener('click', async () => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: els.emailInput.value.trim(),
+      password: els.passwordInput.value
+    });
+    if (error) return showToast(error.message, 'error');
+    currentUser = data.user;
+    updateAuthUI();
+    hideAuthModal();
+    loadPosts();
+  });
+
+  els.signUpBtn.addEventListener('click', async () => {
+    const { data, error } = await supabase.auth.signUp({
+      email: els.emailInput.value.trim(),
+      password: els.passwordInput.value
+    });
+    if (error) return showToast(error.message, 'error');
+    showToast('Check your email to confirm!', 'success');
+    hideAuthModal();
+  });
+
+  els.closeModal.addEventListener('click', hideAuthModal);
+
+  // Feed click delegation (only once)
+  els.blogFeed.addEventListener('click', handleFeedClick);
+
+  // Init
   async function init() {
     const { data: { session } } = await supabase.auth.getSession();
     currentUser = session?.user ?? null;
     updateAuthUI();
 
+    // Realtime auth listener
+    supabase.auth.onAuthStateChange((event, session) => {
+      currentUser = session?.user ?? null;
+      updateAuthUI();
+      loadPosts();
+    });
+
     await loadPosts();
 
-    // Realtime
-    supabase
-      .channel('public:posts')
+    // Realtime posts
+    supabase.channel('public:posts')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'posts' }, () => loadPosts())
       .subscribe();
+
+    // Restore theme
+    if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.dataset.theme = 'dark';
+      els.themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+    }
   }
 
   init();
