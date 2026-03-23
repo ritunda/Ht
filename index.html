@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#ff4500">
-    <title>Tribal - Invite-Only Community</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>Reddit Status - Social Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
@@ -15,309 +14,252 @@
         }
 
         :root {
-            --primary: #ff4500;
-            --primary-dark: #e03e00;
-            --secondary: #8b5cf6;
-            --dark: #1a1a2e;
-            --gray: #6c757d;
-            --light-gray: #f8f9fa;
-            --border: #e9ecef;
-            --success: #10b981;
-            --danger: #ef4444;
+            --primary: #FF4500;
+            --primary-dark: #E03E00;
+            --primary-light: #FF6B35;
+            --dark-bg: #030303;
+            --card-bg: #1A1A1B;
+            --border: #343536;
+            --text-primary: #D7DADC;
+            --text-secondary: #818384;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: #f5f5f5;
-            color: var(--dark);
-            line-height: 1.6;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
         }
 
-        body.dark {
-            --dark: #f5f5f5;
-            --light-gray: #1a1a2e;
-            --border: #2d2d3a;
-            background: #121212;
-            color: #e5e5e5;
-        }
-
-        .auth-container {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .auth-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 450px;
-            width: 100%;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-
-        body.dark .auth-card {
-            background: #1e1e2a;
-        }
-
-        .auth-card h2 {
-            color: var(--primary);
-            margin-bottom: 10px;
-            font-size: 28px;
-        }
-
-        .auth-card .subtitle {
-            color: var(--gray);
-            margin-bottom: 30px;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            font-size: 16px;
-            transition: all 0.3s;
-            background: white;
-        }
-
-        body.dark .input-group input {
-            background: #2d2d3a;
-            color: white;
-            border-color: #3d3d4a;
-        }
-
-        .input-group input:focus {
-            border-color: var(--primary);
-            outline: none;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 14px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-        }
-
-        .btn-outline:hover {
-            background: var(--primary);
-            color: white;
-        }
-
-        .app-main {
-            display: none;
+        .app {
+            max-width: 800px;
+            margin: 0 auto;
             padding-bottom: 70px;
         }
 
         .header {
-            background: white;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 16px;
             position: sticky;
             top: 0;
             z-index: 100;
-            padding: 12px 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-        }
-
-        body.dark .header {
-            background: #1e1e2a;
         }
 
         .logo {
-            font-size: 24px;
-            font-weight: bold;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .user-menu {
             display: flex;
-            gap: 15px;
             align-items: center;
-            flex-wrap: wrap;
+            gap: 8px;
         }
 
-        .points-badge {
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 14px;
+        .logo i {
+            font-size: 28px;
+            color: var(--primary);
         }
 
-        .stories-bar {
-            background: white;
-            padding: 15px;
+        .logo h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .status-bar {
+            background: var(--card-bg);
+            padding: 12px 16px;
             overflow-x: auto;
+            white-space: nowrap;
+            border-bottom: 1px solid var(--border);
             display: flex;
-            gap: 15px;
-            margin: 10px 0;
-            scrollbar-width: thin;
+            gap: 12px;
         }
 
-        body.dark .stories-bar {
-            background: #1e1e2a;
-        }
-
-        .story-item {
-            text-align: center;
+        .status-item {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
             cursor: pointer;
             flex-shrink: 0;
         }
 
-        .story-avatar {
-            width: 70px;
-            height: 70px;
+        .status-avatar {
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
-            border: 3px solid var(--primary);
-            padding: 2px;
-            background: white;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            font-weight: bold;
+            font-size: 20px;
+            border: 3px solid var(--primary);
         }
 
-        .story-avatar img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .create-post {
-            background: white;
-            padding: 20px;
-            margin: 10px;
-            border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        body.dark .create-post {
-            background: #1e1e2a;
-        }
-
-        .create-post input, .create-post textarea, .create-post select {
-            width: 100%;
-            margin-bottom: 10px;
-            padding: 12px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            font-size: 14px;
-        }
-
-        body.dark .create-post input,
-        body.dark .create-post textarea,
-        body.dark .create-post select {
-            background: #2d2d3a;
-            color: white;
-            border-color: #3d3d4a;
+        .status-name {
+            font-size: 11px;
+            color: var(--text-secondary);
         }
 
         .post-card {
-            background: white;
-            margin: 10px;
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        body.dark .post-card {
-            background: #1e1e2a;
+            background: var(--card-bg);
+            margin: 8px 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
         }
 
         .post-header {
+            padding: 12px;
             display: flex;
-            align-items: center;
             gap: 12px;
-            margin-bottom: 12px;
         }
 
         .post-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            object-fit: cover;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .post-meta {
+            flex: 1;
         }
 
         .post-author {
             font-weight: 600;
+            font-size: 14px;
         }
 
         .post-time {
-            font-size: 12px;
-            color: var(--gray);
-        }
-
-        .post-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin: 12px 0;
+            font-size: 11px;
+            color: var(--text-secondary);
         }
 
         .post-content {
-            margin-bottom: 16px;
+            padding: 0 12px 12px 12px;
         }
 
-        .post-stats {
+        .post-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .post-text {
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .post-media {
+            margin-top: 8px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .post-media img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .voting-section {
             display: flex;
-            gap: 20px;
-            padding-top: 12px;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
             border-top: 1px solid var(--border);
         }
 
         .vote-btn {
-            cursor: pointer;
-            padding: 8px;
             background: none;
             border: none;
-            font-size: 14px;
-            color: var(--gray);
+            cursor: pointer;
+            padding: 8px;
+            color: var(--text-secondary);
+            font-size: 16px;
         }
 
-        .vote-btn:hover {
+        .vote-btn.upvoted {
             color: var(--primary);
         }
 
-        .admin-panel {
-            background: white;
-            margin: 10px;
-            padding: 20px;
-            border-radius: 16px;
+        .vote-btn.downvoted {
+            color: #7193FF;
+        }
+
+        .vote-count {
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            margin-left: auto;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .comments-section {
+            padding: 12px;
+            background: rgba(0,0,0,0.2);
             display: none;
         }
 
-        body.dark .admin-panel {
-            background: #1e1e2a;
+        .comments-section.open {
+            display: block;
+        }
+
+        .comment {
+            padding: 8px 0 8px 32px;
+            border-left: 2px solid var(--border);
+            margin-top: 8px;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--primary);
+        }
+
+        .comment-text {
+            font-size: 13px;
+            margin: 4px 0;
+        }
+
+        .add-comment {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .add-comment input {
+            flex: 1;
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--text-primary);
         }
 
         .fab {
@@ -330,8 +272,8 @@
             background: var(--primary);
             color: white;
             border: none;
-            font-size: 24px;
             cursor: pointer;
+            font-size: 24px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             z-index: 90;
         }
@@ -343,62 +285,45 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.9);
             z-index: 1000;
-            align-items: center;
             justify-content: center;
+            align-items: center;
         }
 
         .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
+            background: var(--card-bg);
+            border-radius: 16px;
+            max-width: 90%;
+            width: 400px;
+            padding: 20px;
         }
 
-        body.dark .modal-content {
-            background: #1e1e2a;
-        }
-
-        .comment {
-            padding: 10px;
-            margin: 10px 0;
-            background: var(--light-gray);
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--border);
             border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
         }
 
-        @media (max-width: 768px) {
-            .post-title {
-                font-size: 18px;
-            }
-            
-            .header {
-                flex-direction: column;
-                gap: 10px;
-            }
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 8px;
         }
 
-        .loading {
-            text-align: center;
-            padding: 40px;
-        }
-
-        .spinner {
-            border: 3px solid var(--border);
-            border-top: 3px solid var(--primary);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .btn-secondary {
+            background: var(--border);
         }
 
         .toast {
@@ -406,11 +331,10 @@
             bottom: 80px;
             left: 50%;
             transform: translateX(-50%);
-            background: #333;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 40px;
-            z-index: 1000;
+            background: rgba(0,0,0,0.9);
+            padding: 10px 20px;
+            border-radius: 30px;
+            z-index: 2000;
             animation: fadeInUp 0.3s;
         }
 
@@ -425,710 +349,712 @@
             }
         }
 
-        .invite-code-display {
-            background: var(--light-gray);
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 50px auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .user-bar {
+            background: var(--card-bg);
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .points-badge {
+            background: rgba(255,69,0,0.2);
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--primary);
+        }
+
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 400px;
+            width: 100%;
+            border: 1px solid var(--border);
+        }
+
+        .auth-card h2 {
+            margin: 16px 0 8px;
+            text-align: center;
+        }
+
+        .auth-card p {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
             padding: 10px;
-            border-radius: 8px;
+            border-radius: 30px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+        }
+
+        .tab-btn.inactive {
+            background: var(--border);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .demo-codes {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .demo-codes span {
+            display: inline-block;
+            background: rgba(255,69,0,0.2);
+            padding: 4px 8px;
+            border-radius: 12px;
+            margin: 4px;
             font-family: monospace;
-            margin: 10px 0;
         }
     </style>
 </head>
 <body>
-    <!-- Auth Container -->
-    <div id="authContainer" class="auth-container">
-        <div class="auth-card">
-            <h2>🔥 Tribal</h2>
-            <p class="subtitle">Connect, Share, Earn</p>
-            
-            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                <button onclick="showLogin()" id="loginTabBtn" class="btn">Login</button>
-                <button onclick="showRegister()" id="registerTabBtn" class="btn btn-outline">Register</button>
-            </div>
-            
-            <!-- Login Form -->
-            <div id="loginForm">
-                <div class="input-group">
-                    <input type="text" id="loginUsername" placeholder="Username">
-                </div>
-                <div class="input-group">
-                    <input type="password" id="loginPassword" placeholder="Password">
-                </div>
-                <button class="btn" onclick="login()">Login</button>
-            </div>
-            
-            <!-- Register Form -->
-            <div id="registerForm" style="display: none;">
-                <div class="input-group">
-                    <input type="text" id="regInviteCode" placeholder="Invitation Code">
-                </div>
-                <div class="input-group">
-                    <input type="text" id="regUsername" placeholder="Username (min 3 characters)">
-                </div>
-                <div class="input-group">
-                    <input type="text" id="regDisplayName" placeholder="Display Name">
-                </div>
-                <div class="input-group">
-                    <input type="password" id="regPassword" placeholder="Password (min 4 chars)">
-                </div>
-                <div class="input-group">
-                    <input type="password" id="regConfirmPassword" placeholder="Confirm Password">
-                </div>
-                <button class="btn" onclick="register()">Register</button>
-            </div>
-            
-            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); text-align: center;">
-                <p style="font-size: 12px; color: var(--gray);">
-                    💡 Use invite code: <strong>ADMIN2024</strong> to become admin
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main App -->
-    <div id="appMain" class="app-main">
-        <div class="header">
-            <div class="logo">Tribal 🔥</div>
-            <div class="user-menu">
-                <span class="points-badge" id="pointsDisplay">💰 0 pts</span>
-                <span id="usernameDisplay" style="font-weight: 500;"></span>
-                <button class="btn-outline" style="padding: 8px 16px;" onclick="toggleDarkMode()">🌙</button>
-                <button class="btn-outline" style="padding: 8px 16px;" onclick="logout()">Logout</button>
-            </div>
-        </div>
-        
-        <div class="stories-bar" id="storiesBar">
-            <div class="story-item" onclick="openStoryModal()">
-                <div class="story-avatar" style="border-color: var(--primary); background: linear-gradient(135deg, var(--primary), var(--secondary));">
-                    <div style="font-size: 30px; color: white;">+</div>
-                </div>
-                <div>Add Story</div>
-            </div>
-        </div>
-        
-        <div class="create-post">
-            <input type="text" id="postTitle" placeholder="Title (optional)">
-            <textarea id="postContent" placeholder="What's on your mind?" rows="3"></textarea>
-            <select id="postCategory">
-                <option value="general">General</option>
-                <option value="discussion">Discussion</option>
-                <option value="memes">Memes</option>
-                <option value="news">News</option>
-            </select>
-            <button class="btn" onclick="createPost()">Post ✨ (+5 points)</button>
-        </div>
-        
-        <div id="adminPanel" class="admin-panel">
-            <h3>🛡️ Admin Panel</h3>
-            <div style="margin: 15px 0;">
-                <input type="number" id="inviteCount" placeholder="Count" value="1" style="padding: 8px; width: 100px;">
-                <button onclick="generateCodes()" class="btn" style="width: auto; padding: 8px 20px;">Generate Codes</button>
-            </div>
-            <div id="inviteCodesList"></div>
-            <hr style="margin: 15px 0;">
-            <div id="adminStats"></div>
-        </div>
-        
-        <div id="postsContainer"></div>
-        <button class="fab" onclick="scrollToTop()">↑</button>
-    </div>
-    
-    <!-- Story Modal -->
-    <div id="storyModal" class="modal">
-        <div class="modal-content">
-            <h3>Add Story</h3>
-            <textarea id="storyContent" rows="4" placeholder="What's happening? (disappears in 24h)" style="width: 100%; margin: 15px 0; padding: 12px;"></textarea>
-            <button class="btn" onclick="addStory()">Post Story (+10 points)</button>
-            <button class="btn btn-outline" onclick="closeModal('storyModal')">Cancel</button>
-        </div>
-    </div>
-    
-    <!-- Comments Modal -->
-    <div id="commentsModal" class="modal">
-        <div class="modal-content">
-            <h3 id="commentsTitle">Comments</h3>
-            <div id="commentsList" style="max-height: 300px; overflow-y: auto; margin: 15px 0;"></div>
-            <textarea id="newComment" rows="3" placeholder="Write a comment..." style="width: 100%; padding: 12px;"></textarea>
-            <button class="btn" onclick="addComment()" style="margin-top: 10px;">Post Comment (+2 points)</button>
-            <button class="btn btn-outline" onclick="closeModal('commentsModal')">Close</button>
-        </div>
-    </div>
-    
-    <!-- Ad Modal -->
-    <div id="adModal" class="modal">
-        <div class="modal-content" style="text-align: center;">
-            <h3>Watch Ad & Earn!</h3>
-            <p style="margin: 20px 0;">Earn 50 points by watching this ad</p>
-            <div style="background: linear-gradient(135deg, #667eea, #764ba2); padding: 40px; border-radius: 12px; margin: 20px 0;">
-                <i class="fas fa-play-circle" style="font-size: 64px; color: white;"></i>
-            </div>
-            <button class="btn" onclick="claimAdReward()">Claim 50 Points</button>
-            <button class="btn btn-outline" onclick="closeModal('adModal')">Close</button>
-        </div>
+    <div id="app">
+        <div class="spinner"></div>
     </div>
 
     <script>
-        // Supabase setup
-        const supabaseUrl = 'https://sumscrtyvjuuadogpnqt.supabase.co';
-        const supabaseKey = 'sb_publishable_Pw9kUwTyMRafHAjtdaVlAQ_yV5ayVwF';
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        const SUPABASE_URL = 'https://sumscrtyvjuuadogpnqt.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_Pw9kUwTyMRafHAjtdaVlAQ_yV5ayVwF';
         
+        let supabase;
         let currentUser = null;
+        let posts = [];
+        let statuses = [];
+        let currentModal = null;
         
-        // Helper functions
-        function hashPassword(password) {
-            return btoa(password + 'tribal_salt_2024');
+        async function init() {
+            try {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                
+                const { data: { session } } = await supabase.auth.getSession();
+                
+                if (session) {
+                    const { data: profile } = await supabase
+                        .from('profiles')
+                        .select('*')
+                        .eq('id', session.user.id)
+                        .single();
+                    
+                    if (profile) {
+                        currentUser = profile;
+                        currentUser.id = session.user.id;
+                        await loadData();
+                        renderMainApp();
+                        return;
+                    }
+                }
+                renderAuth();
+            } catch (error) {
+                console.error('Init error:', error);
+                renderAuth();
+            }
         }
         
-        async function login() {
-            const username = document.getElementById('loginUsername').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            
-            if (!username || !password) {
-                alert('Please enter username and password');
-                return;
-            }
-            
-            const passwordHash = hashPassword(password);
-            
-            const { data, error } = await supabase
-                .from('profiles')
-                .select('*')
-                .eq('username', username)
-                .eq('password_hash', passwordHash)
-                .single();
-            
-            if (error || !data) {
-                alert('Invalid username or password');
-                return;
-            }
-            
-            currentUser = data;
-            localStorage.setItem('tribal_user', JSON.stringify(data));
-            showMainApp();
-            loadPosts();
-            loadStories();
-            updateUI();
-        }
-        
-        async function register() {
-            const inviteCode = document.getElementById('regInviteCode').value.trim().toUpperCase();
-            const username = document.getElementById('regUsername').value.trim();
-            const displayName = document.getElementById('regDisplayName').value.trim() || username;
-            const password = document.getElementById('regPassword').value;
-            const confirmPassword = document.getElementById('regConfirmPassword').value;
-            
-            if (!inviteCode) {
-                alert('Please enter an invitation code');
-                return;
-            }
-            
-            if (username.length < 3) {
-                alert('Username must be at least 3 characters');
-                return;
-            }
-            
-            if (password.length < 4) {
-                alert('Password must be at least 4 characters');
-                return;
-            }
-            
-            if (password !== confirmPassword) {
-                alert('Passwords do not match');
-                return;
-            }
-            
-            // Check if username exists
-            const { data: existing } = await supabase
-                .from('profiles')
-                .select('username')
-                .eq('username', username)
-                .single();
-            
-            if (existing) {
-                alert('Username already taken');
-                return;
-            }
-            
-            // Verify invitation code
-            const { data: codeData, error: codeError } = await supabase
-                .from('invitation_codes')
-                .select('*')
-                .eq('code', inviteCode)
-                .eq('used', false)
-                .single();
-            
-            if (codeError || !codeData) {
-                alert('Invalid or already used invitation code');
-                return;
-            }
-            
-            // Create user
-            const userId = crypto.randomUUID();
-            const passwordHash = hashPassword(password);
-            const role = inviteCode === 'ADMIN2024' ? 'admin' : 'user';
-            
-            const newUser = {
-                id: userId,
-                username: username,
-                display_name: displayName,
-                password_hash: passwordHash,
-                points: 100,
-                xp: 0,
-                level: 1,
-                role: role,
-                avatar: null,
-                bio: null,
-                created_at: new Date().toISOString()
-            };
-            
-            const { error: insertError } = await supabase
-                .from('profiles')
-                .insert([newUser]);
-            
-            if (insertError) {
-                alert('Registration failed: ' + insertError.message);
-                return;
-            }
-            
-            // Mark invitation code as used
-            await supabase
-                .from('invitation_codes')
-                .update({ used: true, used_by: userId })
-                .eq('code', inviteCode);
-            
-            alert('Registration successful! Please login.');
-            showLogin();
-        }
-        
-        async function createPost() {
-            if (!currentUser) return;
-            
-            const title = document.getElementById('postTitle').value.trim();
-            const content = document.getElementById('postContent').value.trim();
-            const category = document.getElementById('postCategory').value;
-            
-            if (!title && !content) {
-                alert('Please enter title or content');
-                return;
-            }
-            
-            const { error } = await supabase
-                .from('posts')
-                .insert({
-                    id: crypto.randomUUID(),
-                    user_id: currentUser.id,
-                    title: title || null,
-                    content: content,
-                    category: category,
-                    upvotes: 0,
-                    downvotes: 0,
-                    created_at: new Date().toISOString()
-                });
-            
-            if (error) {
-                alert('Error: ' + error.message);
-            } else {
-                document.getElementById('postTitle').value = '';
-                document.getElementById('postContent').value = '';
-                loadPosts();
-                await addPoints(5);
-                showToast('Post created! +5 points');
-            }
+        async function loadData() {
+            await loadPosts();
+            await loadStatuses();
         }
         
         async function loadPosts() {
-            const { data: posts, error } = await supabase
-                .from('posts')
-                .select(`
-                    *,
-                    profiles:user_id (id, username, display_name, avatar)
-                `)
-                .order('created_at', { ascending: false })
-                .limit(50);
-            
-            if (error) {
-                document.getElementById('postsContainer').innerHTML = '<div style="padding:40px;text-align:center;">Error loading posts</div>';
+            try {
+                const { data } = await supabase
+                    .from('posts')
+                    .select('*, profiles:user_id(username, display_name)')
+                    .order('created_at', { ascending: false })
+                    .limit(50);
+                
+                if (data) {
+                    for (let post of data) {
+                        const { data: comments } = await supabase
+                            .from('comments')
+                            .select('*, profiles:user_id(username)')
+                            .eq('post_id', post.id)
+                            .limit(10);
+                        post.comments = comments || [];
+                        
+                        if (currentUser) {
+                            const { data: vote } = await supabase
+                                .from('votes')
+                                .select('vote_type')
+                                .eq('post_id', post.id)
+                                .eq('user_id', currentUser.id)
+                                .maybeSingle();
+                            post.user_vote = vote?.vote_type;
+                        }
+                    }
+                    posts = data;
+                }
+            } catch (error) {
+                console.error('Load posts error:', error);
+            }
+        }
+        
+        async function loadStatuses() {
+            try {
+                const { data } = await supabase
+                    .from('statuses')
+                    .select('*, profiles:user_id(username, display_name)')
+                    .gte('expires_at', new Date().toISOString())
+                    .order('created_at', { ascending: false });
+                
+                statuses = data || [];
+            } catch (error) {
+                console.error('Load statuses error:', error);
+            }
+        }
+        
+        async function createPost(title, content, category, imageUrl) {
+            if (!title?.trim() && !content?.trim()) {
+                showToast('Please enter title or content');
                 return;
             }
             
-            const container = document.getElementById('postsContainer');
-            if (!posts || posts.length === 0) {
-                container.innerHTML = '<div style="padding:40px;text-align:center;">No posts yet. Be the first!</div>';
-                return;
+            try {
+                const { error } = await supabase
+                    .from('posts')
+                    .insert({
+                        title: title?.trim() || '',
+                        content: content?.trim() || '',
+                        category: category || 'general',
+                        user_id: currentUser.id,
+                        media_url: imageUrl || null
+                    });
+                
+                if (error) throw error;
+                
+                await addPoints(5);
+                showToast('Post created! +5 points');
+                await loadPosts();
+                closeModal();
+                renderMainApp();
+            } catch (error) {
+                showToast('Error creating post');
             }
-            
-            container.innerHTML = posts.map(post => `
-                <div class="post-card">
-                    <div class="post-header">
-                        <img class="post-avatar" src="${post.profiles?.avatar || 'https://via.placeholder.com/40'}" onerror="this.src='https://via.placeholder.com/40'">
-                        <div>
-                            <div class="post-author">${escapeHtml(post.profiles?.display_name || post.profiles?.username)}</div>
-                            <div class="post-time">${formatTime(post.created_at)} • ${post.category}</div>
-                        </div>
-                    </div>
-                    ${post.title ? `<div class="post-title">${escapeHtml(post.title)}</div>` : ''}
-                    <div class="post-content">${escapeHtml(post.content)}</div>
-                    <div class="post-stats">
-                        <button class="vote-btn" onclick="votePost('${post.id}', 'up')">👍 ${post.upvotes || 0}</button>
-                        <button class="vote-btn" onclick="votePost('${post.id}', 'down')">👎 ${post.downvotes || 0}</button>
-                        <button class="vote-btn" onclick="openComments('${post.id}', '${escapeHtml(post.title || 'Post')}')">💬 Comment</button>
-                        <button class="vote-btn" onclick="sharePost()">🔗 Share</button>
-                        ${currentUser?.id === post.user_id ? `<button class="vote-btn" onclick="deletePost('${post.id}')">🗑️ Delete</button>` : ''}
-                    </div>
-                </div>
-            `).join('');
+        }
+        
+        async function addPoints(points) {
+            try {
+                const newPoints = (currentUser.points || 0) + points;
+                await supabase
+                    .from('profiles')
+                    .update({ points: newPoints })
+                    .eq('id', currentUser.id);
+                currentUser.points = newPoints;
+            } catch (error) {}
         }
         
         async function votePost(postId, voteType) {
-            if (!currentUser) return;
-            
-            const { data: existing } = await supabase
-                .from('votes')
-                .select('*')
-                .eq('post_id', postId)
-                .eq('user_id', currentUser.id)
-                .single();
-            
-            if (existing) {
-                await supabase.from('votes').delete().eq('id', existing.id);
-            } else {
-                await supabase.from('votes').insert({
-                    id: crypto.randomUUID(),
-                    post_id: postId,
-                    user_id: currentUser.id,
-                    vote_type: voteType
-                });
+            try {
+                const { data: existing } = await supabase
+                    .from('votes')
+                    .select('*')
+                    .eq('post_id', postId)
+                    .eq('user_id', currentUser.id)
+                    .maybeSingle();
                 
-                if (voteType === 'up') {
-                    await addPoints(1);
-                    showToast('+1 point for voting!');
+                const post = posts.find(p => p.id === postId);
+                if (!post) return;
+                
+                if (existing) {
+                    if (existing.vote_type === voteType) {
+                        await supabase.from('votes').delete().eq('id', existing.id);
+                    } else {
+                        await supabase.from('votes').update({ vote_type: voteType }).eq('id', existing.id);
+                    }
+                } else {
+                    await supabase.from('votes').insert({
+                        post_id: postId,
+                        user_id: currentUser.id,
+                        vote_type: voteType
+                    });
+                    
+                    if (voteType === 'up' && post.user_id !== currentUser.id) {
+                        await addPointsToUser(post.user_id, 1);
+                    }
                 }
+                
+                await loadPosts();
+                renderMainApp();
+            } catch (error) {
+                showToast('Error voting');
             }
-            
-            loadPosts();
         }
         
-        async function addPoints(amount) {
-            if (!currentUser) return;
-            
-            const newPoints = (currentUser.points || 0) + amount;
-            await supabase
-                .from('profiles')
-                .update({ points: newPoints })
-                .eq('id', currentUser.id);
-            
-            currentUser.points = newPoints;
-            localStorage.setItem('tribal_user', JSON.stringify(currentUser));
-            updateUI();
-            
-            await supabase.from('transactions').insert({
-                id: crypto.randomUUID(),
-                user_id: currentUser.id,
-                amount: amount,
-                type: 'earn',
-                status: 'completed'
-            });
+        async function addPointsToUser(userId, points) {
+            try {
+                const { data: user } = await supabase
+                    .from('profiles')
+                    .select('points')
+                    .eq('id', userId)
+                    .single();
+                
+                if (user) {
+                    await supabase
+                        .from('profiles')
+                        .update({ points: (user.points || 0) + points })
+                        .eq('id', userId);
+                }
+            } catch (error) {}
         }
         
-        async function loadStories() {
-            const { data: stories } = await supabase
-                .from('statuses')
-                .select('*, profiles:user_id (id, username, display_name, avatar)')
-                .gt('expires_at', new Date().toISOString())
-                .order('created_at', { ascending: false });
+        async function addComment(postId, content) {
+            if (!content?.trim()) return;
             
-            const bar = document.getElementById('storiesBar');
-            bar.innerHTML = '';
-            
-            // Add story button
-            const addBtn = document.createElement('div');
-            addBtn.className = 'story-item';
-            addBtn.onclick = () => openStoryModal();
-            addBtn.innerHTML = `
-                <div class="story-avatar" style="border-color: var(--primary); background: linear-gradient(135deg, var(--primary), var(--secondary));">
-                    <div style="font-size: 30px; color: white;">+</div>
-                </div>
-                <div>Add Story</div>
-            `;
-            bar.appendChild(addBtn);
-            
-            stories?.forEach(story => {
-                const storyEl = document.createElement('div');
-                storyEl.className = 'story-item';
-                storyEl.onclick = () => alert(story.content);
-                storyEl.innerHTML = `
-                    <div class="story-avatar">
-                        <img src="${story.profiles?.avatar || 'https://via.placeholder.com/70'}" onerror="this.src='https://via.placeholder.com/70'">
-                    </div>
-                    <div>${escapeHtml(story.profiles?.display_name?.substring(0, 10) || 'User')}</div>
-                `;
-                bar.appendChild(storyEl);
-            });
+            try {
+                await supabase
+                    .from('comments')
+                    .insert({
+                        post_id: postId,
+                        user_id: currentUser.id,
+                        content: content.trim()
+                    });
+                
+                showToast('Comment added!');
+                await loadPosts();
+                renderMainApp();
+            } catch (error) {
+                showToast('Error adding comment');
+            }
         }
         
-        async function addStory() {
-            if (!currentUser) return;
-            
-            const content = document.getElementById('storyContent').value.trim();
-            if (!content) {
-                alert('Please enter something');
+        async function createStatus(content, mediaUrl) {
+            if (!content?.trim() && !mediaUrl) {
+                showToast('Please enter something');
                 return;
             }
             
             const expiresAt = new Date();
             expiresAt.setHours(expiresAt.getHours() + 24);
             
-            await supabase.from('statuses').insert({
-                id: crypto.randomUUID(),
-                user_id: currentUser.id,
-                content: content,
-                expires_at: expiresAt.toISOString(),
-                created_at: new Date().toISOString()
-            });
-            
-            closeModal('storyModal');
-            document.getElementById('storyContent').value = '';
-            loadStories();
-            await addPoints(10);
-            showToast('Story posted! +10 points');
-        }
-        
-        let currentPostId = null;
-        
-        async function openComments(postId, postTitle) {
-            currentPostId = postId;
-            document.getElementById('commentsTitle').innerHTML = `Comments: ${postTitle}`;
-            await loadComments();
-            document.getElementById('commentsModal').style.display = 'flex';
-        }
-        
-        async function loadComments() {
-            if (!currentPostId) return;
-            
-            const { data: comments } = await supabase
-                .from('comments')
-                .select('*, profiles:user_id (username, display_name)')
-                .eq('post_id', currentPostId)
-                .order('created_at', { ascending: true });
-            
-            const container = document.getElementById('commentsList');
-            if (!comments || comments.length === 0) {
-                container.innerHTML = '<p>No comments yet.</p>';
-                return;
-            }
-            
-            container.innerHTML = comments.map(comment => `
-                <div class="comment">
-                    <strong>${escapeHtml(comment.profiles?.display_name || comment.profiles?.username)}</strong>
-                    <small> ${formatTime(comment.created_at)}</small>
-                    <p style="margin-top: 5px;">${escapeHtml(comment.content)}</p>
-                </div>
-            `).join('');
-        }
-        
-        async function addComment() {
-            if (!currentUser || !currentPostId) return;
-            
-            const content = document.getElementById('newComment').value.trim();
-            if (!content) {
-                alert('Please enter a comment');
-                return;
-            }
-            
-            await supabase.from('comments').insert({
-                id: crypto.randomUUID(),
-                post_id: currentPostId,
-                user_id: currentUser.id,
-                content: content,
-                created_at: new Date().toISOString()
-            });
-            
-            document.getElementById('newComment').value = '';
-            await loadComments();
-            await addPoints(2);
-            showToast('Comment posted! +2 points');
-        }
-        
-        async function generateCodes() {
-            if (currentUser?.role !== 'admin') return;
-            
-            const count = parseInt(document.getElementById('inviteCount').value) || 1;
-            const codes = [];
-            
-            for (let i = 0; i < count; i++) {
-                const code = Math.random().toString(36).substring(2, 10).toUpperCase();
-                codes.push({
-                    id: crypto.randomUUID(),
-                    code: code,
-                    created_by: currentUser.id,
-                    used: false,
-                    created_at: new Date().toISOString()
-                });
-            }
-            
-            await supabase.from('invitation_codes').insert(codes);
-            showToast(`Generated ${count} codes!`);
-            loadInviteCodes();
-        }
-        
-        async function loadInviteCodes() {
-            if (currentUser?.role !== 'admin') return;
-            
-            const { data } = await supabase
-                .from('invitation_codes')
-                .select('*')
-                .order('created_at', { ascending: false })
-                .limit(10);
-            
-            const listDiv = document.getElementById('inviteCodesList');
-            listDiv.innerHTML = '<h4>Recent Codes:</h4>' + (data?.map(code => `
-                <div class="invite-code-display">
-                    <code>${code.code}</code>
-                    <span style="float: right;">${code.used ? '✓ Used' : '✨ Available'}</span>
-                </div>
-            `).join('') || '<p>No codes yet</p>');
-        }
-        
-        async function deletePost(postId) {
-            if (confirm('Delete this post?')) {
-                await supabase.from('posts').delete().eq('id', postId);
-                loadPosts();
-                showToast('Post deleted');
-            }
-        }
-        
-        function updateUI() {
-            if (currentUser) {
-                document.getElementById('pointsDisplay').innerHTML = `💰 ${currentUser.points || 0} pts`;
-                document.getElementById('usernameDisplay').innerHTML = currentUser.display_name || currentUser.username;
+            try {
+                await supabase
+                    .from('statuses')
+                    .insert({
+                        user_id: currentUser.id,
+                        content: content?.trim() || '',
+                        media_url: mediaUrl || null,
+                        expires_at: expiresAt.toISOString()
+                    });
                 
-                if (currentUser.role === 'admin') {
-                    document.getElementById('adminPanel').style.display = 'block';
-                    loadInviteCodes();
-                    loadAdminStats();
-                }
+                showToast('Status posted! 24h remaining');
+                await loadStatuses();
+                closeModal();
+                renderMainApp();
+            } catch (error) {
+                showToast('Error creating status');
             }
         }
         
-        async function loadAdminStats() {
-            const { count: userCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
-            const { count: postCount } = await supabase.from('posts').select('*', { count: 'exact', head: true });
-            document.getElementById('adminStats').innerHTML = `
-                <p>👥 Total Users: ${userCount || 0}</p>
-                <p>📝 Total Posts: ${postCount || 0}</p>
-            `;
+        async function generateInviteCode() {
+            const code = Math.random().toString(36).substring(2, 10).toUpperCase();
+            try {
+                await supabase
+                    .from('invitation_codes')
+                    .insert({ code, created_by: currentUser.id });
+                
+                showToast(`Invite code: ${code}`);
+                return code;
+            } catch (error) {
+                showToast('Error generating code');
+            }
         }
         
-        function showMainApp() {
-            document.getElementById('authContainer').style.display = 'none';
-            document.getElementById('appMain').style.display = 'block';
+        async function registerWithCode(inviteCode, username, password, displayName) {
+            try {
+                const { data: codeData } = await supabase
+                    .from('invitation_codes')
+                    .select('*')
+                    .eq('code', inviteCode.toUpperCase())
+                    .eq('used', false)
+                    .maybeSingle();
+                
+                if (!codeData) {
+                    showToast('Invalid invitation code');
+                    return false;
+                }
+                
+                const { data: auth, error: authError } = await supabase.auth.signUp({
+                    email: `${username.toLowerCase()}@temp.user`,
+                    password: password,
+                    options: {
+                        data: { username: username.toLowerCase(), display_name: displayName }
+                    }
+                });
+                
+                if (authError) {
+                    showToast('Registration error: ' + authError.message);
+                    return false;
+                }
+                
+                await supabase
+                    .from('invitation_codes')
+                    .update({ used: true, used_by: auth.user.id })
+                    .eq('id', codeData.id);
+                
+                showToast('Registration successful! Please login.');
+                return true;
+            } catch (error) {
+                showToast('Registration failed');
+                return false;
+            }
         }
         
-        function showLogin() {
-            document.getElementById('loginForm').style.display = 'block';
-            document.getElementById('registerForm').style.display = 'none';
-            document.getElementById('loginTabBtn').style.background = 'var(--primary)';
-            document.getElementById('registerTabBtn').style.background = 'transparent';
-            document.getElementById('registerTabBtn').style.border = '2px solid var(--primary)';
+        async function login(username, password) {
+            try {
+                const { error } = await supabase.auth.signInWithPassword({
+                    email: `${username.toLowerCase()}@temp.user`,
+                    password: password
+                });
+                
+                if (error) {
+                    showToast('Login failed: ' + error.message);
+                    return false;
+                }
+                
+                const { data: { session } } = await supabase.auth.getSession();
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', session.user.id)
+                    .single();
+                
+                currentUser = profile;
+                currentUser.id = session.user.id;
+                await loadData();
+                renderMainApp();
+                return true;
+            } catch (error) {
+                showToast('Login failed');
+                return false;
+            }
         }
         
-        function showRegister() {
-            document.getElementById('loginForm').style.display = 'none';
-            document.getElementById('registerForm').style.display = 'block';
-            document.getElementById('registerTabBtn').style.background = 'var(--primary)';
-            document.getElementById('loginTabBtn').style.background = 'transparent';
-            document.getElementById('loginTabBtn').style.border = '2px solid var(--primary)';
-        }
-        
-        function openStoryModal() {
-            if (!currentUser) return;
-            document.getElementById('storyModal').style.display = 'flex';
-        }
-        
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-        
-        function logout() {
+        async function logout() {
+            await supabase.auth.signOut();
             currentUser = null;
-            localStorage.removeItem('tribal_user');
-            location.reload();
+            renderAuth();
         }
         
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark');
-            localStorage.setItem('darkMode', document.body.classList.contains('dark'));
-        }
-        
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        
-        function sharePost() {
-            navigator.clipboard.writeText(window.location.href);
-            showToast('Link copied!');
-        }
-        
-        function claimAdReward() {
-            addPoints(50);
-            showToast('+50 points earned!');
-            closeModal('adModal');
-        }
-        
-        function formatTime(dateStr) {
-            const date = new Date(dateStr);
-            const now = new Date();
-            const diff = Math.floor((now - date) / 1000);
-            if (diff < 60) return `${diff}s ago`;
-            if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-            if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
-            return date.toLocaleDateString();
-        }
-        
-        function escapeHtml(str) {
-            if (!str) return '';
-            const div = document.createElement('div');
-            div.textContent = str;
-            return div.innerHTML;
-        }
-        
-        function showToast(msg) {
+        function showToast(message) {
             const toast = document.createElement('div');
             toast.className = 'toast';
-            toast.textContent = msg;
+            toast.textContent = message;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         }
         
-        // Check saved session
-        const savedUser = localStorage.getItem('tribal_user');
-        if (savedUser) {
-            currentUser = JSON.parse(savedUser);
-            showMainApp();
-            loadPosts();
-            loadStories();
-            updateUI();
+        function showModal(content) {
+            if (currentModal) currentModal.remove();
+            currentModal = document.createElement('div');
+            currentModal.className = 'modal';
+            currentModal.style.display = 'flex';
+            currentModal.innerHTML = `<div class="modal-content">${content}</div>`;
+            document.body.appendChild(currentModal);
+            currentModal.onclick = (e) => { if (e.target === currentModal) closeModal(); };
         }
         
-        // Ad interval
-        setInterval(() => {
-            if (currentUser && Math.random() < 0.1) {
-                document.getElementById('adModal').style.display = 'flex';
+        function closeModal() {
+            if (currentModal) currentModal.remove();
+            currentModal = null;
+        }
+        
+        function renderAuth() {
+            document.getElementById('app').innerHTML = `
+                <div class="auth-container">
+                    <div class="auth-card">
+                        <div style="text-align: center;">
+                            <i class="fab fa-reddit-alien" style="font-size: 48px; color: var(--primary);"></i>
+                            <h2>Reddit Status</h2>
+                            <p>Share moments • Upvote content • Earn rewards</p>
+                        </div>
+                        <div class="tab-buttons">
+                            <div id="loginTab" class="tab-btn active">Login</div>
+                            <div id="registerTab" class="tab-btn inactive">Register</div>
+                        </div>
+                        <div id="loginForm">
+                            <div class="form-group">
+                                <input type="text" id="loginUsername" placeholder="Username">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" id="loginPassword" placeholder="Password">
+                            </div>
+                            <button onclick="login(document.getElementById('loginUsername').value, document.getElementById('loginPassword').value)">Login</button>
+                        </div>
+                        <div id="registerForm" style="display: none;">
+                            <div class="form-group">
+                                <input type="text" id="inviteCode" placeholder="Invitation Code">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="regUsername" placeholder="Username">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" id="regPassword" placeholder="Password">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="displayName" placeholder="Display Name">
+                            </div>
+                            <button onclick="registerWithCode(document.getElementById('inviteCode').value, document.getElementById('regUsername').value, document.getElementById('regPassword').value, document.getElementById('displayName').value)">Register</button>
+                        </div>
+                        <div class="demo-codes">
+                            <p>Demo invitation codes:</p>
+                            <span>TEST1234</span> <span>REDDIT01</span> <span>STATUS02</span> <span>SOCIAL03</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('loginTab').onclick = () => {
+                document.getElementById('loginForm').style.display = 'block';
+                document.getElementById('registerForm').style.display = 'none';
+                document.getElementById('loginTab').className = 'tab-btn active';
+                document.getElementById('registerTab').className = 'tab-btn inactive';
+            };
+            document.getElementById('registerTab').onclick = () => {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('registerForm').style.display = 'block';
+                document.getElementById('registerTab').className = 'tab-btn active';
+                document.getElementById('loginTab').className = 'tab-btn inactive';
+            };
+        }
+        
+        function showCreatePostModal() {
+            showModal(`
+                <h3>Create Post</h3>
+                <input type="text" id="postTitle" placeholder="Title">
+                <textarea id="postContent" rows="4" placeholder="What's on your mind?"></textarea>
+                <select id="postCategory">
+                    <option value="general">General</option>
+                    <option value="news">News</option>
+                    <option value="memes">Memes</option>
+                    <option value="discussion">Discussion</option>
+                </select>
+                <input type="text" id="postImage" placeholder="Image URL (optional)">
+                <button onclick="createPost(document.getElementById('postTitle').value, document.getElementById('postContent').value, document.getElementById('postCategory').value, document.getElementById('postImage').value)">Post</button>
+                <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+            `);
+        }
+        
+        function showCreateStatusModal() {
+            showModal(`
+                <h3>Add Status (24h)</h3>
+                <textarea id="statusContent" rows="3" placeholder="What's happening?"></textarea>
+                <input type="text" id="statusMedia" placeholder="Image URL (optional)">
+                <button onclick="createStatus(document.getElementById('statusContent').value, document.getElementById('statusMedia').value)">Post Status</button>
+                <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+            `);
+        }
+        
+        function viewStatus(statusId) {
+            const status = statuses.find(s => s.id === statusId);
+            if (status) {
+                showModal(`
+                    <div style="text-align: center;">
+                        <div class="status-avatar" style="width: 80px; height: 80px; margin: 0 auto;">${(status.profiles?.display_name || status.profiles?.username || '?').charAt(0).toUpperCase()}</div>
+                        <h3>${escapeHtml(status.profiles?.display_name || status.profiles?.username)}</h3>
+                        ${status.media_url ? `<img src="${status.media_url}" style="max-width: 100%; border-radius: 12px; margin: 16px 0;">` : ''}
+                        <p>${escapeHtml(status.content || '')}</p>
+                        <button class="btn-secondary" onclick="closeModal()">Close</button>
+                    </div>
+                `);
             }
-        }, 45000);
-        
-        // Dark mode
-        if (localStorage.getItem('darkMode') === 'true') {
-            document.body.classList.add('dark');
         }
         
-        // Realtime updates
-        supabase.channel('realtime').on('postgres_changes', { event: '*', schema: 'public', table: 'posts' }, () => {
-            loadPosts();
-        }).on('postgres_changes', { event: '*', schema: 'public', table: 'statuses' }, () => {
-            loadStories();
-        }).subscribe();
+        function viewImage(url) {
+            showModal(`<img src="${url}" style="max-width: 100%; border-radius: 12px;">`);
+        }
+        
+        function sharePost(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (post && navigator.share) {
+                navigator.share({ title: post.title || 'Post', text: post.content });
+            } else {
+                showToast('Share feature available on mobile');
+            }
+        }
+        
+        function toggleComments(postId) {
+            const div = document.getElementById(`comments-${postId}`);
+            if (div) div.classList.toggle('open');
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function renderMainApp() {
+            const statusBarHtml = statuses.map(s => `
+                <div class="status-item" onclick="viewStatus('${s.id}')">
+                    <div class="status-avatar">${(s.profiles?.display_name || s.profiles?.username || '?').charAt(0).toUpperCase()}</div>
+                    <div class="status-name">${(s.profiles?.display_name || s.profiles?.username || '').substring(0, 12)}</div>
+                </div>
+            `).join('');
+            
+            const postsHtml = posts.map(post => {
+                const netScore = (post.upvotes || 0) - (post.downvotes || 0);
+                const isUpvoted = post.user_vote === 'up';
+                const isDownvoted = post.user_vote === 'down';
+                
+                return `
+                    <div class="post-card">
+                        <div class="post-header">
+                            <div class="post-avatar">${(post.profiles?.display_name || post.profiles?.username || '?').charAt(0).toUpperCase()}</div>
+                            <div class="post-meta">
+                                <div class="post-author">u/${escapeHtml(post.profiles?.username || 'user')}</div>
+                                <div class="post-time">${new Date(post.created_at).toLocaleDateString()}</div>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            ${post.title ? `<div class="post-title">${escapeHtml(post.title)}</div>` : ''}
+                            <div class="post-text">${escapeHtml(post.content || '')}</div>
+                            ${post.media_url ? `<div class="post-media"><img src="${post.media_url}" onclick="viewImage('${post.media_url}')"></div>` : ''}
+                        </div>
+                        <div class="voting-section">
+                            <button class="vote-btn ${isUpvoted ? 'upvoted' : ''}" onclick="votePost('${post.id}', 'up')"><i class="fas fa-arrow-up"></i></button>
+                            <span class="vote-count">${netScore}</span>
+                            <button class="vote-btn ${isDownvoted ? 'downvoted' : ''}" onclick="votePost('${post.id}', 'down')"><i class="fas fa-arrow-down"></i></button>
+                            <div class="action-buttons">
+                                <button class="action-btn" onclick="toggleComments('${post.id}')"><i class="fas fa-comment"></i> ${post.comments?.length || 0}</button>
+                                <button class="action-btn" onclick="sharePost('${post.id}')"><i class="fas fa-share"></i></button>
+                            </div>
+                        </div>
+                        <div class="comments-section" id="comments-${post.id}">
+                            ${(post.comments || []).map(c => `
+                                <div class="comment">
+                                    <div class="comment-author">u/${escapeHtml(c.profiles?.username || 'user')}</div>
+                                    <div class="comment-text">${escapeHtml(c.content)}</div>
+                                </div>
+                            `).join('')}
+                            <div class="add-comment">
+                                <input type="text" id="comment-${post.id}" placeholder="Add a comment...">
+                                <button onclick="addComment('${post.id}', document.getElementById('comment-${post.id}').value)">Post</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('app').innerHTML = `
+                <div class="app">
+                    <div class="header">
+                        <div class="logo">
+                            <i class="fab fa-reddit-alien"></i>
+                            <h1>reddit status</h1>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button onclick="generateInviteCode()" style="width: auto; padding: 8px 12px; background: none; color: var(--text-secondary);" title="Generate Invite Code">
+                                <i class="fas fa-ticket-alt"></i>
+                            </button>
+                            <button onclick="logout()" style="width: auto; padding: 8px 12px; background: none; color: var(--text-secondary);">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="user-bar">
+                        <div class="user-info">
+                            <div class="post-avatar" style="width: 40px; height: 40px;">${currentUser?.display_name?.charAt(0).toUpperCase() || 'U'}</div>
+                            <div>
+                                <div>${escapeHtml(currentUser?.display_name || currentUser?.username)}</div>
+                                <div style="font-size: 11px; color: var(--text-secondary);">@${escapeHtml(currentUser?.username)}</div>
+                            </div>
+                        </div>
+                        <div class="points-badge">
+                            <i class="fas fa-star"></i> ${currentUser?.points || 0} points
+                        </div>
+                    </div>
+                    
+                    <div class="status-bar">
+                        <div class="status-item" onclick="showCreateStatusModal()">
+                            <div class="status-avatar" style="background: var(--primary);"><i class="fas fa-plus"></i></div>
+                            <div class="status-name">My Status</div>
+                        </div>
+                        ${statusBarHtml}
+                    </div>
+                    
+                    <div class="feed">
+                        ${postsHtml || '<div style="text-align: center; padding: 60px;">No posts yet. Be the first!</div>'}
+                    </div>
+                    
+                    <button class="fab" onclick="showCreatePostModal()">
+                        <i class="fas fa-pen"></i>
+                    </button>
+                </div>
+            `;
+        }
+        
+        window.createPost = createPost;
+        window.votePost = votePost;
+        window.addComment = addComment;
+        window.createStatus = createStatus;
+        window.generateInviteCode = generateInviteCode;
+        window.showCreatePostModal = showCreatePostModal;
+        window.showCreateStatusModal = showCreateStatusModal;
+        window.closeModal = closeModal;
+        window.viewImage = viewImage;
+        window.sharePost = sharePost;
+        window.toggleComments = toggleComments;
+        window.login = login;
+        window.logout = logout;
+        window.registerWithCode = registerWithCode;
+        window.viewStatus = viewStatus;
+        
+        init();
     </script>
 </body>
-</html>
+    </html>
